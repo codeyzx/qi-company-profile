@@ -41,6 +41,7 @@
     "zod": "^3.24.2"
   },
   "dependencies": {
+    "@tanstack/table-core": "^8.21.3",
     "embla-carousel-autoplay": "^8.5.2"
   }
 }

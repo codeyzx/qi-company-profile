@@ -66,12 +66,16 @@
       ],
     },
   ];
+
+  // Utility class presets to avoid @apply in <style>
+  const mobilePopularClass =
+    "relative border-primary border-2 shadow-md bg-card scale-[1.02] my-8 ring-2 ring-primary/50 ring-offset-2 ring-offset-background";
+  const desktopPopularClass =
+    "relative border-primary border-2 shadow-2xl bg-card transform-gpu ring-2 ring-primary/50 ring-offset-4 ring-offset-background dark:shadow-primary/20 dark:ring-primary/40";
 </script>
 
 <section class="container py-16 sm:py-32">
-  <h2 class="text-lg text-primary text-center mb-2 tracking-wider">
-    Pricing
-  </h2>
+  <h2 class="text-lg text-primary text-center mb-2 tracking-wider">Pricing</h2>
 
   <h2 class="text-3xl md:text-4xl text-center font-bold mb-4">
     Get unlimited access
@@ -85,10 +89,12 @@
   <div class="block lg:hidden space-y-6">
     {#each plans as { title, popular, price, description, buttonText, benefitList }}
       <div class="relative">
-        <Card class={popular ? 'popular-mobile' : ''}>
+        <Card class={popular ? mobilePopularClass : ""}>
           {#if popular}
             <div class="absolute -top-4 left-1/2 -translate-x-1/2">
-              <span class="bg-primary text-primary-foreground text-xs sm:text-sm font-medium px-3 sm:px-4 py-1 rounded-full whitespace-nowrap">
+              <span
+                class="bg-primary text-primary-foreground text-xs sm:text-sm font-medium px-3 sm:px-4 py-1 rounded-full whitespace-nowrap"
+              >
                 Most Popular
               </span>
             </div>
@@ -98,11 +104,15 @@
               {title}
             </CardTitle>
 
-            <CardDescription class="pb-4 text-sm sm:text-base">{description}</CardDescription>
+            <CardDescription class="pb-4 text-sm sm:text-base"
+              >{description}</CardDescription
+            >
 
             <div>
               <span class="text-2xl sm:text-3xl font-bold">${price}</span>
-              <span class="text-muted-foreground text-sm sm:text-base"> /month</span>
+              <span class="text-muted-foreground text-sm sm:text-base">
+                /month</span
+              >
             </div>
           </CardHeader>
 
@@ -118,10 +128,7 @@
           </CardContent>
 
           <CardFooter>
-            <Button 
-              variant={popular ? "default" : "secondary"}
-              class="w-full"
-            >
+            <Button variant={popular ? "default" : "secondary"} class="w-full">
               {buttonText}
             </Button>
           </CardFooter>
@@ -133,11 +140,17 @@
   <!-- Desktop Layout -->
   <div class="hidden lg:grid lg:grid-cols-3 gap-8 relative">
     {#each plans as { title, popular, price, description, buttonText, benefitList }}
-      <div class="relative {popular ? 'scale-110 hover:scale-112 z-10' : 'hover:scale-105'} transition-all duration-200">
-        <Card class={popular ? 'popular-desktop' : 'hover:border-primary/50'}>
+      <div
+        class="relative {popular
+          ? 'scale-110 hover:scale-112 z-10'
+          : 'hover:scale-105'} transition-all duration-200"
+      >
+        <Card class={popular ? desktopPopularClass : "hover:border-primary/50"}>
           {#if popular}
             <div class="absolute -top-4 left-1/2 -translate-x-1/2">
-              <span class="bg-primary text-primary-foreground text-sm font-medium px-4 py-1 rounded-full whitespace-nowrap shadow-lg">
+              <span
+                class="bg-primary text-primary-foreground text-sm font-medium px-4 py-1 rounded-full whitespace-nowrap shadow-lg"
+              >
                 Most Popular
               </span>
             </div>
@@ -147,11 +160,15 @@
               {title}
             </CardTitle>
 
-            <CardDescription class="pb-4 text-sm sm:text-base">{description}</CardDescription>
+            <CardDescription class="pb-4 text-sm sm:text-base"
+              >{description}</CardDescription
+            >
 
             <div>
               <span class="text-2xl sm:text-3xl font-bold">${price}</span>
-              <span class="text-muted-foreground text-sm sm:text-base"> /month</span>
+              <span class="text-muted-foreground text-sm sm:text-base">
+                /month</span
+              >
             </div>
           </CardHeader>
 
@@ -167,10 +184,7 @@
           </CardContent>
 
           <CardFooter>
-            <Button 
-              variant={popular ? "default" : "secondary"}
-              class="w-full"
-            >
+            <Button variant={popular ? "default" : "secondary"} class="w-full">
               {buttonText}
             </Button>
           </CardFooter>
@@ -179,17 +193,3 @@
     {/each}
   </div>
 </section>
-
-<style>
-  .popular-mobile {
-    @apply relative border-primary border-2 shadow-md bg-card scale-[1.02] my-8 ring-2 ring-primary/50 ring-offset-2 ring-offset-background;
-  }
-  
-  .popular-desktop {
-    @apply relative border-primary border-2 shadow-2xl bg-card transform-gpu ring-2 ring-primary/50 ring-offset-4 ring-offset-background;
-  }
-  
-  :global(.dark) .popular-desktop {
-    @apply shadow-primary/20 ring-primary/40;
-  }
-</style>
