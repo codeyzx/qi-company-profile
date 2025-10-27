@@ -21,8 +21,7 @@
   const routeList: RouteProps[] = [
     { href: "#home", label: "Home" },
     { href: "#berita", label: "Berita" },
-    { href: "#review", label: "Review" },
-    { href: "#game-populer", label: "Game Populer" },
+    { href: "#kategori", label: "Kategori" },
     { href: "#tentang", label: "Tentang Kami" },
     { href: "#contact", label: "Kontak" },
   ];

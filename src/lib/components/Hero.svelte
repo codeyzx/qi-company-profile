@@ -73,42 +73,10 @@
         </div>
       </div>
     </div>
-
-    <div class="relative group mt-14">
-      <div
-        class="absolute -top-6 right-12 w-[90%] h-12 lg:h-[80%] bg-jgYellow/30 blur-3xl rounded-full img-shadow-animation"
-      ></div>
-
-      <img
-        class="w-full md:w-[1200px] mx-auto rounded-lg relative rouded-lg leading-none flex items-center border-2 border-jgYellow/30 img-border-animation shadow-2xl"
-        src="https://images.unsplash.com/photo-1542751371-adc38448a05e?w=1200&h=675&fit=crop&q=80"
-        alt="Jelajah Game - Portal Berita Game"
-      />
-
-      <div
-        class="absolute bottom-0 left-0 w-full h-20 md:h-28 bg-gradient-to-b from-background/0 via-background/50 to-background rounded-lg"
-      ></div>
-    </div>
   </div>
 </section>
 
 <style>
-  .img-shadow-animation {
-    animation-name: img-shadow-animation;
-    animation-iteration-count: infinite;
-    animation-duration: 3s;
-    animation-timing-function: ease-in-out;
-    animation-direction: alternate;
-  }
-
-  .img-border-animation {
-    animation-name: img-border-animation;
-    animation-iteration-count: infinite;
-    animation-duration: 3s;
-    animation-timing-function: ease-in-out;
-    animation-direction: alternate;
-  }
-
   .animate-gradient {
     background-size: 200% auto;
     animation: gradient 3s linear infinite;
