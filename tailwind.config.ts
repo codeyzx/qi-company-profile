@@ -59,6 +59,9 @@ const config: Config = {
 					border: "hsl(var(--sidebar-border))",
 					ring: "hsl(var(--sidebar-ring))",
         		},
+				// Jelajah Game Brand Colors
+				jgYellow: "#F5CB3B",
+				jgPurple: "#322F81",
 			},
 			borderRadius: {
 				xl: "calc(var(--radius) + 4px)",
@@ -67,7 +70,8 @@ const config: Config = {
 				sm: "calc(var(--radius) - 4px)"
 			},
 			fontFamily: {
-				sans: [...fontFamily.sans]
+				sans: ["Poppins", ...fontFamily.sans],
+				heading: ["Poppins", ...fontFamily.sans]
 			},
 			keyframes: {
 				"accordion-down": {

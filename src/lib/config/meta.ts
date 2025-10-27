@@ -1,11 +1,13 @@
 export const siteConfig = {
-    name: "Shadcn/Svelte Landing Page",
-    description: "A beautiful landing page template built with Shadcn/Svelte and SvelteKit",
-    url: "https://shadcn-sveltekit-landing-page.zxce3.net",
-    ogImage: "https://shadcn-sveltekit-landing-page.zxce3.net/og.png",
+    name: "Jelajah Game",
+    description: "Portal berita dan insight terbaru tentang game lokal dan global untuk gamer Indonesia",
+    slogan: "Explore the Game Universe.",
+    url: "https://jelajahgame.com",
+    ogImage: "https://jelajahgame.com/og.png",
     links: {
-        twitter: "https://twitter.com/zxce3_",
-        github: "https://github.com/zxce3"
+        instagram: "https://instagram.com/jelajahgame",
+        youtube: "https://youtube.com/@jelajahgame",
+        tiktok: "https://tiktok.com/@jelajahgame"
     },
-    keywords: ["shadcn", "svelte", "sveltekit", "landing page", "template"]
+    keywords: ["jelajah game", "portal game", "berita game", "review game", "game indonesia", "gaming news"]
 }
