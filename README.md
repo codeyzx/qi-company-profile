@@ -37,6 +37,10 @@
 - [x] Animated Components
 - [x] SEO Optimized with Meta Tags
 - [x] Social Media Integration (Instagram, YouTube, TikTok)
+- [x] **Dynamic Instagram Content Integration** - Artikel terbaru di-fetch langsung dari Instagram API
+- [x] **Smart Content Categorization** - Otomatis mendeteksi kategori dari hashtag (#review, #berita, #list, #fact, #viral)
+- [x] **Fallback Content System** - Tetap menampilkan konten jika Instagram API gagal
+- [x] **Loading States & Error Handling** - UX yang smooth dengan skeleton loader dan error states
 
 ## 🚀 How to Run
 
@@ -62,7 +66,15 @@ pnpm install
 yarn install
 ```
 
-4. Run development server
+4. **Setup Instagram API (Opsional)**
+
+   Jika ingin menggunakan konten dinamis dari Instagram:
+
+   1. Ikuti panduan di [`INSTAGRAM_SETUP.md`](./INSTAGRAM_SETUP.md)
+   2. Buat file `.env` dan isi `INSTAGRAM_ACCESS_TOKEN`
+   3. Restart development server
+
+5. Run development server
 
 ```bash
 npm run dev
@@ -72,7 +84,7 @@ pnpm dev
 yarn dev
 ```
 
-5. Open your browser and visit `http://localhost:5173`
+6. Open your browser and visit `http://localhost:5173`
 
 ## 📦 Building for Production
 
