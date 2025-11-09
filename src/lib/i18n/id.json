@@ -46,10 +46,10 @@
   },
   "news": {
     "title": "Berita Terkini",
-    "subtitle": "Artikel Terbaru",
+    "subtitle": "Postingan",
     "description": "Update terbaru seputar dunia gaming, dari berita, review, hingga tips & trik",
     "readTime": "min",
-    "viewAll": "Lihat Semua Artikel"
+    "viewAll": "Lihat Semua Postingan"
   },
   "categories": {
     "title": "Konten Pilihan",

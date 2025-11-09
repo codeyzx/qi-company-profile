@@ -81,14 +81,18 @@
     >
       <div class="col-span-full xl:col-span-2">
         <a href="/" class="flex font-bold items-center gap-2 mb-4">
-          <Gamepad2
-            class="bg-gradient-to-br from-jgYellow to-jgYellow/80 rounded-lg w-9 h-9 p-1.5 border-2 border-jgPurple text-jgPurple"
+          <img 
+            src="/Logo Jelajah Game Instagram.jpg" 
+            alt="Jelajah Game Logo"
+            class="w-9 h-9 rounded-lg object-cover border-2 border-jgPurple"
           />
-          <h3
-            class="text-2xl bg-gradient-to-r from-jgYellow to-jgPurple bg-clip-text text-transparent"
-          >
-            {siteName}
-          </h3>
+          <span class="logo-text-gradient h-7 w-auto inline-block">
+            <img 
+              src="/Text Only_Jelajah Game.png" 
+              alt="Jelajah Game"
+              class="h-7 object-contain"
+            />
+          </span>
         </a>
         <p class="text-sm text-muted-foreground max-w-xs">
           {siteDescription}
@@ -246,3 +250,20 @@
     </section>
   </div>
 </footer>
+
+<style>
+  /* Logo Text Static Gradient - Kuning ke Biru (TANPA animasi) */
+  :global(.logo-text-gradient) {
+    display: inline-block;
+    background: linear-gradient(90deg, #fbbf24 0%, #322F81 100%);
+    -webkit-mask: url('/Text Only_Jelajah Game.png') no-repeat center;
+    -webkit-mask-size: contain;
+    mask: url('/Text Only_Jelajah Game.png') no-repeat center;
+    mask-size: contain;
+  }
+  
+  :global(.logo-text-gradient img) {
+    opacity: 0;
+  }
+</style>
+

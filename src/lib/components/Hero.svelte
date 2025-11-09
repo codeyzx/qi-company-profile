@@ -177,7 +177,13 @@
       >
         <h1 class="leading-tight">
           <span class="inline-flex items-center gap-3 mb-2">
-            <Gamepad2 class="size-12 md:size-16 text-jgYellow animate-pulse" />
+            <span class="hero-logo-animated h-16 md:h-24 w-auto inline-block">
+              <img 
+                src="/Logo Jelajah Game + Text.png" 
+                alt="Jelajah Game"
+                class="h-16 md:h-24 object-contain"
+              />
+            </span>
           </span>
           <br />
           <span
@@ -287,5 +293,21 @@
     100% {
       background-position: 0% center;
     }
+  }
+
+  /* Hero Logo Animation - SAMA PERSIS dengan text gradient menggunakan mask */
+  :global(.hero-logo-animated) {
+    display: inline-block;
+    background: linear-gradient(90deg, #fbbf24 0%, #322F81 50%, #fbbf24 100%);
+    background-size: 200% 100%;
+    animation: gradient 3s linear infinite;
+    -webkit-mask: url('/Logo Jelajah Game + Text.png') no-repeat center;
+    -webkit-mask-size: contain;
+    mask: url('/Logo Jelajah Game + Text.png') no-repeat center;
+    mask-size: contain;
+  }
+  
+  :global(.hero-logo-animated img) {
+    opacity: 0;
   }
 </style>

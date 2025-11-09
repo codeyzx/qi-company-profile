@@ -46,10 +46,10 @@
   },
   "news": {
     "title": "Latest News",
-    "subtitle": "Recent Articles",
+    "subtitle": "Latest",
     "description": "Latest updates from the gaming world, from news, reviews, to tips & tricks",
     "readTime": "min",
-    "viewAll": "View All Articles"
+    "viewAll": "View All Posts"
   },
   "categories": {
     "title": "Featured Content",
