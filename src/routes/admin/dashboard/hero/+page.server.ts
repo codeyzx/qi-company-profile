@@ -24,7 +24,7 @@ export const actions: Actions = {
     if (!user) return fail(401, { error: "Unauthorized" });
 
     const formData = await request.formData();
-    const data = {
+    const data: any = {
       title_id: formData.get("title_id") as string,
       title_en: formData.get("title_en") as string,
       description_id: formData.get("description_id") as string,
@@ -33,7 +33,11 @@ export const actions: Actions = {
       badge_text_en: formData.get("badge_text_en") as string,
       cta_primary_text_id: formData.get("cta_primary_text_id") as string,
       cta_primary_text_en: formData.get("cta_primary_text_en") as string,
-      cta_primary_url: formData.get(\"cta_primary_url\") as string,\n      cta_secondary_text_id: formData.get(\"cta_secondary_text_id\") as string,\n      cta_secondary_text_en: formData.get(\"cta_secondary_text_en\") as string,\n      cta_secondary_url: formData.get(\"cta_secondary_url\") as string,\n      status: \"published\" as const,
+      cta_primary_url: formData.get("cta_primary_url") as string,
+      cta_secondary_text_id: formData.get("cta_secondary_text_id") as string,
+      cta_secondary_text_en: formData.get("cta_secondary_text_en") as string,
+      cta_secondary_url: formData.get("cta_secondary_url") as string,
+      status: "published" as const,
       updated_by: user.id,
     };
 
@@ -50,7 +54,6 @@ export const actions: Actions = {
         // Don't fail, just skip stats update
       }
     }
-    };
 
     // Check if hero content exists
     const { data: existing } = await adminClient
