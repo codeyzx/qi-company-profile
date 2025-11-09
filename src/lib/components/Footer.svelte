@@ -2,6 +2,74 @@
   import { Gamepad2 } from "lucide-svelte";
   import { Separator } from "$lib/components/ui/separator";
   import { siteConfig } from "$lib/config/meta";
+  import { locale } from "$lib/stores/locale";
+  import { t } from "$lib/i18n";
+
+  interface SiteConfigItem {
+    key: string;
+    value_id: string;
+    value_en: string;
+  }
+
+  interface ContactData {
+    social_links?: {
+      instagram?: string;
+      youtube?: string;
+      tiktok?: string;
+      twitter?: string;
+      discord?: string;
+    };
+  }
+
+  interface Category {
+    id: string;
+    title_id: string;
+    title_en: string;
+  }
+
+  interface Props {
+    siteConfig?: SiteConfigItem[];
+    contactData?: ContactData;
+    categories?: Category[];
+  }
+
+  let {
+    siteConfig: dbSiteConfig = [],
+    contactData,
+    categories = [],
+  }: Props = $props();
+
+  // Helper function to get config value
+  function getConfigValue(key: string, fallback?: string): string {
+    const config = dbSiteConfig.find((c) => c.key === key);
+    return config?.value_id || fallback || siteConfig.name;
+  }
+
+  // Helper function to get localized content
+  function getLocalizedText(
+    textId?: string,
+    textEn?: string,
+    fallback?: string
+  ): string {
+    if ($locale === "en") {
+      return textEn || textId || fallback || "";
+    }
+    return textId || textEn || fallback || "";
+  }
+
+  const siteName = $derived(getConfigValue("site_name", siteConfig.name));
+  const siteDescription = $derived(
+    getConfigValue("site_description_id", siteConfig.description)
+  );
+  const siteSlogan = $derived(getConfigValue("site_slogan", siteConfig.slogan));
+  const socialLinks = $derived(
+    contactData?.social_links || {
+      instagram: siteConfig.links.instagram,
+      youtube: siteConfig.links.youtube,
+      tiktok: siteConfig.links.tiktok,
+    }
+  );
+  const topCategories = $derived(categories.slice(0, 4)); // Show first 4 categories
 </script>
 
 <footer id="footer" class="container py-24 pb-16 sm:py-32 sm:pb-24">
@@ -13,131 +81,158 @@
     >
       <div class="col-span-full xl:col-span-2">
         <a href="/" class="flex font-bold items-center gap-2 mb-4">
-          <Gamepad2
-            class="bg-gradient-to-br from-jgYellow to-jgYellow/80 rounded-lg w-9 h-9 p-1.5 border-2 border-jgPurple text-jgPurple"
+          <img 
+            src="/Logo Jelajah Game Instagram.jpg" 
+            alt="Jelajah Game Logo"
+            class="w-9 h-9 rounded-lg object-cover border-2 border-jgPurple"
           />
-          <h3
-            class="text-2xl bg-gradient-to-r from-jgYellow to-jgPurple bg-clip-text text-transparent"
-          >
-            {siteConfig.name}
-          </h3>
+          <span class="logo-text-gradient h-7 w-auto inline-block">
+            <img 
+              src="/Text Only_Jelajah Game.png" 
+              alt="Jelajah Game"
+              class="h-7 object-contain"
+            />
+          </span>
         </a>
         <p class="text-sm text-muted-foreground max-w-xs">
-          {siteConfig.description}
+          {siteDescription}
         </p>
         <p class="text-sm text-jgYellow font-semibold italic mt-2">
-          "{siteConfig.slogan}"
+          "{siteSlogan}"
         </p>
       </div>
 
       <div class="flex flex-col gap-2">
-        <h3 class="font-bold text-lg text-jgYellow">Navigasi</h3>
+        <h3 class="font-bold text-lg text-jgYellow">
+          {$t("footer.navigation")}
+        </h3>
         <div>
           <a
             href="#home"
             class="opacity-60 hover:opacity-100 hover:text-jgYellow transition-all"
-            >Home</a
+            >{$t("nav.home")}</a
           >
         </div>
         <div>
           <a
             href="#berita"
             class="opacity-60 hover:opacity-100 hover:text-jgYellow transition-all"
-            >Berita</a
+            >{$t("nav.news")}</a
           >
         </div>
         <div>
           <a
             href="#kategori"
             class="opacity-60 hover:opacity-100 hover:text-jgYellow transition-all"
-            >Kategori</a
+            >{$t("nav.categories")}</a
           >
         </div>
         <div>
           <a
             href="#tentang"
             class="opacity-60 hover:opacity-100 hover:text-jgYellow transition-all"
-            >Tentang Kami</a
+            >{$t("nav.about")}</a
           >
         </div>
       </div>
 
       <div class="flex flex-col gap-2">
-        <h3 class="font-bold text-lg text-jgYellow">Kategori</h3>
-        <div>
-          <span class="opacity-60 hover:opacity-100 cursor-pointer">Action</span
-          >
-        </div>
-        <div>
-          <span class="opacity-60 hover:opacity-100 cursor-pointer">RPG</span>
-        </div>
-        <div>
-          <span class="opacity-60 hover:opacity-100 cursor-pointer"
-            >Strategy</span
-          >
-        </div>
-        <div>
-          <span class="opacity-60 hover:opacity-100 cursor-pointer">Indie</span>
-        </div>
+        <h3 class="font-bold text-lg text-jgYellow">
+          {$t("footer.categories")}
+        </h3>
+        {#each topCategories as category}
+          <div>
+            <span class="opacity-60 hover:opacity-100 cursor-pointer">
+              {getLocalizedText(category.title_id, category.title_en)}
+            </span>
+          </div>
+        {/each}
+        {#if topCategories.length === 0}
+          <!-- Fallback categories if no data -->
+          <div>
+            <span class="opacity-60 hover:opacity-100 cursor-pointer"
+              >Action</span
+            >
+          </div>
+          <div>
+            <span class="opacity-60 hover:opacity-100 cursor-pointer">RPG</span>
+          </div>
+          <div>
+            <span class="opacity-60 hover:opacity-100 cursor-pointer"
+              >Strategy</span
+            >
+          </div>
+          <div>
+            <span class="opacity-60 hover:opacity-100 cursor-pointer"
+              >Indie</span
+            >
+          </div>
+        {/if}
       </div>
 
       <div class="flex flex-col gap-2">
-        <h3 class="font-bold text-lg text-jgYellow">Bantuan</h3>
+        <h3 class="font-bold text-lg text-jgYellow">{$t("footer.help")}</h3>
         <div>
           <a
             href="#contact"
             class="opacity-60 hover:opacity-100 hover:text-jgYellow transition-all"
-            >Hubungi Kami</a
+            >{$t("footer.contact")}</a
           >
         </div>
         <div>
           <a
             href="#tentang"
             class="opacity-60 hover:opacity-100 hover:text-jgYellow transition-all"
-            >Tentang Kami</a
+            >{$t("footer.about")}</a
           >
         </div>
         <div>
           <button
             type="button"
             class="opacity-60 hover:opacity-100 hover:text-jgYellow transition-all text-left"
-            >Kebijakan Privasi</button
+            >{$t("footer.privacy")}</button
           >
         </div>
       </div>
 
       <div class="flex flex-col gap-2">
-        <h3 class="font-bold text-lg text-jgYellow">Sosial Media</h3>
-        <div>
-          <a
-            href={siteConfig.links.instagram}
-            target="_blank"
-            rel="noopener noreferrer"
-            class="opacity-60 hover:opacity-100 hover:text-jgYellow transition-all"
-          >
-            Instagram
-          </a>
-        </div>
-        <div>
-          <a
-            href={siteConfig.links.youtube}
-            target="_blank"
-            rel="noopener noreferrer"
-            class="opacity-60 hover:opacity-100 hover:text-jgYellow transition-all"
-          >
-            YouTube
-          </a>
-        </div>
-        <div>
-          <a
-            href={siteConfig.links.tiktok}
-            target="_blank"
-            rel="noopener noreferrer"
-            class="opacity-60 hover:opacity-100 hover:text-jgYellow transition-all"
-          >
-            TikTok
-          </a>
-        </div>
+        <h3 class="font-bold text-lg text-jgYellow">{$t("footer.social")}</h3>
+        {#if socialLinks.instagram}
+          <div>
+            <a
+              href={socialLinks.instagram}
+              target="_blank"
+              rel="noopener noreferrer"
+              class="opacity-60 hover:opacity-100 hover:text-jgYellow transition-all"
+            >
+              Instagram
+            </a>
+          </div>
+        {/if}
+        {#if socialLinks.youtube}
+          <div>
+            <a
+              href={socialLinks.youtube}
+              target="_blank"
+              rel="noopener noreferrer"
+              class="opacity-60 hover:opacity-100 hover:text-jgYellow transition-all"
+            >
+              YouTube
+            </a>
+          </div>
+        {/if}
+        {#if socialLinks.tiktok}
+          <div>
+            <a
+              href={socialLinks.tiktok}
+              target="_blank"
+              rel="noopener noreferrer"
+              class="opacity-60 hover:opacity-100 hover:text-jgYellow transition-all"
+            >
+              TikTok
+            </a>
+          </div>
+        {/if}
       </div>
     </div>
 
@@ -145,13 +240,30 @@
 
     <section class="text-center">
       <h3 class="text-sm text-muted-foreground">
-        &copy; 2025 <span class="font-bold text-jgYellow"
-          >{siteConfig.name}</span
-        > - Portal Berita Game Indonesia
+        &copy; 2025 <span class="font-bold text-jgYellow">{siteName}</span> - {$t(
+          "footer.tagline"
+        )}
       </h3>
       <p class="text-xs text-muted-foreground mt-2">
-        Dibuat dengan ❤️ untuk komunitas gamer Indonesia
+        {$t("footer.madeWith")}
       </p>
     </section>
   </div>
 </footer>
+
+<style>
+  /* Logo Text Static Gradient - Kuning ke Biru (TANPA animasi) */
+  :global(.logo-text-gradient) {
+    display: inline-block;
+    background: linear-gradient(90deg, #fbbf24 0%, #322F81 100%);
+    -webkit-mask: url('/Text Only_Jelajah Game.png') no-repeat center;
+    -webkit-mask-size: contain;
+    mask: url('/Text Only_Jelajah Game.png') no-repeat center;
+    mask-size: contain;
+  }
+  
+  :global(.logo-text-gradient img) {
+    opacity: 0;
+  }
+</style>
+

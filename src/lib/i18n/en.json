@@ -1,0 +1,126 @@
+{
+  "common": {
+    "home": "Home",
+    "news": "News",
+    "categories": "Categories",
+    "about": "About Us",
+    "contact": "Contact",
+    "readMore": "Read More",
+    "viewAll": "View All",
+    "loading": "Loading...",
+    "error": "An error occurred",
+    "save": "Save",
+    "cancel": "Cancel",
+    "delete": "Delete",
+    "edit": "Edit",
+    "create": "Create",
+    "update": "Update",
+    "publish": "Publish",
+    "draft": "Draft",
+    "published": "Published",
+    "scheduled": "Scheduled",
+    "archived": "Archived"
+  },
+  "nav": {
+    "home": "Home",
+    "news": "News",
+    "categories": "Categories",
+    "about": "About Us",
+    "contact": "Contact"
+  },
+  "hero": {
+    "trending": "Trending",
+    "badge": "Latest Gaming Portal for Gen Z",
+    "explore": "Explore the Game Universe with Us",
+    "withUs": "Universe with Us",
+    "readLatestNews": "Read Latest News",
+    "exploreGames": "Explore Popular Games",
+    "articles": "Game Articles",
+    "reviews": "Game Reviews",
+    "activeReaders": "Active Readers",
+    "defaultTitle": "Explore the Game Universe with Us",
+    "defaultDescription": "Latest news and insights about local and global games for Indonesian gamers",
+    "defaultBadge": "Latest Gaming Portal for Gen Z",
+    "defaultPrimaryCTA": "Read Latest News",
+    "defaultSecondaryCTA": "Explore Popular Games"
+  },
+  "news": {
+    "title": "Latest News",
+    "subtitle": "Latest",
+    "description": "Latest updates from the gaming world, from news, reviews, to tips & tricks",
+    "readTime": "min",
+    "viewAll": "View All Posts"
+  },
+  "categories": {
+    "title": "Featured Content",
+    "subtitle": "Explore Content Categories",
+    "description": "Find various types of gaming content that suit your interests — from latest news to viral clips!",
+    "viewContent": "View Content",
+    "totalContent": "Quality Content Awaits You!"
+  },
+  "about": {
+    "badge": "About Us",
+    "title": "Who We Are",
+    "subtitle": "for Gen Z",
+    "stats": {
+      "articles": "Articles Published",
+      "reviews": "Games Reviewed",
+      "readers": "Active Readers",
+      "coverage": "News Coverage"
+    }
+  },
+  "contact": {
+    "badge": "Contact Us",
+    "title": "Any Questions",
+    "description": "We're here to help. Send us a message or question and our team will respond promptly",
+    "email": "Our Email",
+    "socialMedia": "Social Media",
+    "operatingHours": "Operating Hours",
+    "form": {
+      "firstName": "First Name",
+      "lastName": "Last Name",
+      "email": "Email",
+      "subject": "Subject",
+      "message": "Message",
+      "send": "Send Message",
+      "selectSubject": "Select subject",
+      "subjects": {
+        "general": "General Inquiry",
+        "partnership": "Partnership",
+        "submitArticle": "Submit Article",
+        "bugReport": "Bug Report",
+        "feedback": "Feedback"
+      }
+    }
+  },
+  "footer": {
+    "description": "Latest news and insights about local and global games for Indonesian gamers",
+    "navigation": "Navigation",
+    "categories": "Categories",
+    "help": "Help",
+    "contact": "Contact Us",
+    "about": "About Us",
+    "privacy": "Privacy Policy",
+    "social": "Social Media",
+    "tagline": "Indonesian Gaming News Portal",
+    "madeWith": "Made with ❤️ for Indonesian gaming community",
+    "quickLinks": "Quick Links",
+    "followUs": "Follow Us",
+    "copyright": "All Rights Reserved"
+  },
+  "admin": {
+    "login": "Login",
+    "logout": "Logout",
+    "dashboard": "Dashboard",
+    "welcome": "Welcome",
+    "menu": {
+      "overview": "Overview",
+      "hero": "Hero Section",
+      "articles": "Articles",
+      "categories": "Categories",
+      "about": "About",
+      "contact": "Contact",
+      "siteConfig": "Configuration"
+    }
+  }
+}

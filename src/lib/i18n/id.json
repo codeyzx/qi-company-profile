@@ -1,0 +1,126 @@
+{
+  "common": {
+    "home": "Home",
+    "news": "Berita",
+    "categories": "Kategori",
+    "about": "Tentang Kami",
+    "contact": "Kontak",
+    "readMore": "Baca Selengkapnya",
+    "viewAll": "Lihat Semua",
+    "loading": "Memuat...",
+    "error": "Terjadi kesalahan",
+    "save": "Simpan",
+    "cancel": "Batal",
+    "delete": "Hapus",
+    "edit": "Edit",
+    "create": "Buat",
+    "update": "Perbarui",
+    "publish": "Publikasikan",
+    "draft": "Draft",
+    "published": "Dipublikasikan",
+    "scheduled": "Terjadwal",
+    "archived": "Diarsipkan"
+  },
+  "nav": {
+    "home": "Home",
+    "news": "Berita",
+    "categories": "Kategori",
+    "about": "Tentang Kami",
+    "contact": "Kontak"
+  },
+  "hero": {
+    "trending": "Trending",
+    "badge": "Portal Game Terkini untuk Gen Z",
+    "explore": "Jelajahi Dunia Game Bersama Kami",
+    "withUs": "Bersama Kami",
+    "readLatestNews": "Baca Berita Terbaru",
+    "exploreGames": "Explore Game Populer",
+    "articles": "Artikel Game",
+    "reviews": "Game Reviews",
+    "activeReaders": "Pembaca Aktif",
+    "defaultTitle": "Jelajahi Dunia Game Bersama Kami",
+    "defaultDescription": "Portal berita dan insight terbaru tentang game lokal dan global untuk gamer Indonesia",
+    "defaultBadge": "Portal Game Terkini untuk Gen Z",
+    "defaultPrimaryCTA": "Baca Berita Terbaru",
+    "defaultSecondaryCTA": "Explore Game Populer"
+  },
+  "news": {
+    "title": "Berita Terkini",
+    "subtitle": "Postingan",
+    "description": "Update terbaru seputar dunia gaming, dari berita, review, hingga tips & trik",
+    "readTime": "min",
+    "viewAll": "Lihat Semua Postingan"
+  },
+  "categories": {
+    "title": "Konten Pilihan",
+    "subtitle": "Jelajahi Kategori Konten",
+    "description": "Temukan berbagai jenis konten gaming yang sesuai dengan minatmu — dari berita terkini hingga klip viral yang seru!",
+    "viewContent": "Lihat Konten",
+    "totalContent": "Konten Berkualitas Menantimu!"
+  },
+  "about": {
+    "badge": "Tentang Kami",
+    "title": "Siapa Kami",
+    "subtitle": "untuk Gen Z",
+    "stats": {
+      "articles": "Artikel Published",
+      "reviews": "Game Reviewed",
+      "readers": "Active Readers",
+      "coverage": "News Coverage"
+    }
+  },
+  "contact": {
+    "badge": "Hubungi Kami",
+    "title": "Ada Pertanyaan",
+    "description": "Kami siap membantu Anda. Kirimkan pesan atau pertanyaan Anda dan tim kami akan segera merespons",
+    "email": "Email Kami",
+    "socialMedia": "Sosial Media",
+    "operatingHours": "Jam Operasional",
+    "form": {
+      "firstName": "Nama Depan",
+      "lastName": "Nama Belakang",
+      "email": "Email",
+      "subject": "Subjek",
+      "message": "Pesan",
+      "send": "Kirim Pesan",
+      "selectSubject": "Pilih subjek",
+      "subjects": {
+        "general": "Pertanyaan Umum",
+        "partnership": "Kerja Sama",
+        "submitArticle": "Submit Artikel",
+        "bugReport": "Laporan Bug",
+        "feedback": "Saran & Kritik"
+      }
+    }
+  },
+  "footer": {
+    "description": "Portal berita dan insight terbaru tentang game lokal dan global untuk gamer Indonesia",
+    "navigation": "Navigasi",
+    "categories": "Kategori",
+    "help": "Bantuan",
+    "contact": "Hubungi Kami",
+    "about": "Tentang Kami",
+    "privacy": "Kebijakan Privasi",
+    "social": "Sosial Media",
+    "tagline": "Portal Berita Game Indonesia",
+    "madeWith": "Dibuat dengan ❤️ untuk komunitas gamer Indonesia",
+    "quickLinks": "Link Cepat",
+    "followUs": "Ikuti Kami",
+    "copyright": "Hak Cipta Dilindungi"
+  },
+  "admin": {
+    "login": "Masuk",
+    "logout": "Keluar",
+    "dashboard": "Dashboard",
+    "welcome": "Selamat Datang",
+    "menu": {
+      "overview": "Ringkasan",
+      "hero": "Hero Section",
+      "articles": "Artikel",
+      "categories": "Kategori",
+      "about": "Tentang",
+      "contact": "Kontak",
+      "siteConfig": "Konfigurasi"
+    }
+  }
+}
