@@ -64,7 +64,7 @@ Selamat! CMS untuk Jelajah Game telah selesai dibangun dengan lengkap.
 - Image preview
 - Delete functionality
 - File validation (type, size)
-- API endpoints (/api/upload)
+- API endpoints (/upload-file)
 
 ### 8. **Content Versioning** ✅
 
@@ -163,7 +163,7 @@ Selamat! CMS untuk Jelajah Game telah selesai dibangun dengan lengkap.
 
 ### API Endpoints
 
-- `src/routes/api/upload/+server.ts` - Upload API
+- `src/routes/upload-file/+server.ts` - Upload API
 
 ### Landing Page
 
