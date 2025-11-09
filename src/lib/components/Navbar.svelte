@@ -11,31 +11,101 @@
   import { Separator } from "$lib/components/ui/separator";
   import { Menu, Gamepad2 } from "lucide-svelte";
   import ToggleTheme from "$lib/components/ToggleTheme.svelte";
+  import LanguageSwitcher from "$lib/components/LanguageSwitcher.svelte";
   import { siteConfig } from "$lib/config/meta";
+  import { locale } from "$lib/stores/locale";
+  import { t } from "$lib/i18n";
 
   interface RouteProps {
     href: string;
     label: string;
   }
 
-  const routeList: RouteProps[] = [
-    { href: "#home", label: "Home" },
-    { href: "#berita", label: "Berita" },
-    { href: "#kategori", label: "Kategori" },
-    { href: "#tentang", label: "Tentang Kami" },
-    { href: "#contact", label: "Kontak" },
-  ];
+  interface SiteConfigItem {
+    key: string;
+    value_id: string;
+    value_en: string;
+  }
 
-  let isOpen = false;
+  interface NavbarConfig {
+    menu_items?: Array<{
+      href: string;
+      label_id: string;
+      label_en: string;
+      order: number;
+    }>;
+  }
+
+  interface Props {
+    siteConfig?: SiteConfigItem[];
+    navbarConfig?: NavbarConfig;
+  }
+
+  let { siteConfig: dbSiteConfig = [], navbarConfig }: Props = $props();
+
+  // Helper function to get config value
+  function getConfigValue(key: string, fallback?: string): string {
+    const config = dbSiteConfig.find((c) => c.key === key);
+    return config?.value_id || fallback || siteConfig.name;
+  }
+
+  // Helper function to get localized menu text
+  function getLocalizedMenuText(textId: string, textEn: string): string {
+    if ($locale === "en") {
+      return textEn || textId;
+    }
+    return textId || textEn;
+  }
+
+  // Dynamic menu items or fallback
+  const dynamicMenuItems = $derived(
+    navbarConfig?.menu_items || [
+      { href: "#home", label_id: "Home", label_en: "Home", order: 1 },
+      { href: "#berita", label_id: "Berita", label_en: "News", order: 2 },
+      {
+        href: "#kategori",
+        label_id: "Kategori",
+        label_en: "Categories",
+        order: 3,
+      },
+      {
+        href: "#tentang",
+        label_id: "Tentang Kami",
+        label_en: "About Us",
+        order: 4,
+      },
+      { href: "#contact", label_id: "Kontak", label_en: "Contact", order: 5 },
+    ]
+  );
+
+  const routeList = $derived(
+    dynamicMenuItems
+      .sort((a, b) => a.order - b.order)
+      .map((item) => ({
+        href: item.href,
+        label: getLocalizedMenuText(item.label_id, item.label_en),
+      }))
+  );
+
+  let isOpen = $state(false);
+
+  const siteName = $derived(getConfigValue("site_name", siteConfig.name));
 </script>
 
 <header
   class="w-[90%] md:w-[70%] lg:w-[75%] lg:max-w-screen-xl top-5 mx-auto sticky border z-40 rounded-2xl flex justify-between items-center p-2 bg-card shadow-md dark:shadow-dark shadow-light"
 >
-  <a href="/" class="font-bold text-lg flex items-center gap-2 hover:opacity-80 transition-opacity">
-    <Gamepad2 class="bg-gradient-to-br from-jgYellow to-jgYellow/80 rounded-lg w-9 h-9 p-1.5 border-2 border-jgPurple text-jgPurple" />
-    <span class="bg-gradient-to-r from-jgYellow to-jgPurple bg-clip-text text-transparent font-bold">
-      {siteConfig.name}
+  <a
+    href="/"
+    class="font-bold text-lg flex items-center gap-2 hover:opacity-80 transition-opacity"
+  >
+    <Gamepad2
+      class="bg-gradient-to-br from-jgYellow to-jgYellow/80 rounded-lg w-9 h-9 p-1.5 border-2 border-jgPurple text-jgPurple"
+    />
+    <span
+      class="bg-gradient-to-r from-jgYellow to-jgPurple bg-clip-text text-transparent font-bold"
+    >
+      {siteName}
     </span>
   </a>
 
@@ -46,14 +116,21 @@
         <Menu on:click={() => (isOpen = true)} class="cursor-pointer" />
       </SheetTrigger>
 
-      <SheetContent side="left" class="flex flex-col justify-between rounded-tr-2xl rounded-br-2xl bg-card">
+      <SheetContent
+        side="left"
+        class="flex flex-col justify-between rounded-tr-2xl rounded-br-2xl bg-card"
+      >
         <div>
           <SheetHeader class="mb-4 ml-4">
             <SheetTitle class="flex items-center gap-2">
               <a href="/" class="flex items-center gap-2">
-                <Gamepad2 class="bg-gradient-to-br from-jgYellow to-jgYellow/80 rounded-lg size-9 p-1.5 border-2 border-jgPurple text-jgPurple" />
-                <span class="bg-gradient-to-r from-jgYellow to-jgPurple bg-clip-text text-transparent font-bold">
-                  {siteConfig.name}
+                <Gamepad2
+                  class="bg-gradient-to-br from-jgYellow to-jgYellow/80 rounded-lg size-9 p-1.5 border-2 border-jgPurple text-jgPurple"
+                />
+                <span
+                  class="bg-gradient-to-r from-jgYellow to-jgPurple bg-clip-text text-transparent font-bold"
+                >
+                  {siteName}
                 </span>
               </a>
             </SheetTitle>
@@ -61,7 +138,7 @@
 
           <div class="flex flex-col gap-2">
             {#each routeList as { href, label }}
-              <a on:click={() => (isOpen = false)} {href}>
+              <a onclick={() => (isOpen = false)} {href}>
                 <Button variant="ghost" class="justify-start text-base w-full">
                   {label}
                 </Button>
@@ -72,7 +149,10 @@
 
         <SheetFooter class="flex-col sm:flex-col justify-start items-start">
           <Separator class="mb-2" />
-          <ToggleTheme />
+          <div class="flex gap-2 w-full">
+            <LanguageSwitcher />
+            <ToggleTheme />
+          </div>
         </SheetFooter>
       </SheetContent>
     </Sheet>
@@ -88,6 +168,7 @@
   </div>
 
   <div class="hidden lg:flex items-center gap-2">
+    <LanguageSwitcher />
     <ToggleTheme />
   </div>
 </header>
