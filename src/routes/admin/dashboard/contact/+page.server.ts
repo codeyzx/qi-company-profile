@@ -4,19 +4,20 @@ import type { PageServerLoad, Actions } from "./$types";
 
 export const load: PageServerLoad = async () => {
   try {
-    // Get contact info
+    // Get contact info - should only have 1 record
     const { data: contactData, error: contactError } = await adminClient
       .from("contact_info")
       .select("*")
-      .order("created_at", { ascending: true });
+      .limit(1)
+      .single();
 
-    if (contactError) {
+    if (contactError && contactError.code !== 'PGRST116') {
       console.error("Error loading contact info:", contactError);
       throw error(500, "Failed to load contact info");
     }
 
     return {
-      contactInfo: contactData || [],
+      contactInfo: contactData || null,
     };
   } catch (err) {
     console.error("Load error:", err);
@@ -25,118 +26,70 @@ export const load: PageServerLoad = async () => {
 };
 
 export const actions: Actions = {
-  create: async ({ request }) => {
-    try {
-      const formData = await request.formData();
-
-      const contactData = {
-        contact_type: formData.get("contact_type") as string,
-        label_id: formData.get("label_id") as string,
-        label_en: formData.get("label_en") as string,
-        value: formData.get("value") as string,
-        display_order: parseInt(formData.get("display_order") as string) || 0,
-        is_public: formData.get("is_public") === "on",
-        icon: (formData.get("icon") as string) || null,
-        link_url: (formData.get("link_url") as string) || null,
-      };
-
-      const { error: insertError } = await adminClient
-        .from("contact_info")
-        .insert([contactData]);
-
-      if (insertError) {
-        console.error("Insert error:", insertError);
-        return {
-          error: "Failed to create contact info: " + insertError.message,
-        };
-      }
-
-      return {
-        success: true,
-        message: "Contact info created successfully",
-      };
-    } catch (err) {
-      console.error("Create error:", err);
-      return {
-        error: "Failed to create contact info",
-      };
-    }
-  },
-
   update: async ({ request }) => {
     try {
       const formData = await request.formData();
       const id = formData.get("id") as string;
 
-      if (!id) {
-        return { error: "ID is required for update" };
+      // Parse emails array
+      const emailsStr = formData.get("emails") as string;
+      const emails = emailsStr ? emailsStr.split('\n').map(e => e.trim()).filter(e => e) : [];
+
+      // Parse phone numbers array
+      const phonesStr = formData.get("phone_numbers") as string;
+      const phoneNumbers = phonesStr ? phonesStr.split('\n').map(p => p.trim()).filter(p => p) : [];
+
+      // Parse social links JSON
+      let socialLinks = {};
+      const socialLinksStr = formData.get("social_links") as string;
+      if (socialLinksStr && socialLinksStr.trim()) {
+        try {
+          socialLinks = JSON.parse(socialLinksStr);
+        } catch (e) {
+          return { error: "Invalid JSON format for social links" };
+        }
       }
 
       const contactData = {
-        contact_type: formData.get("contact_type") as string,
-        label_id: formData.get("label_id") as string,
-        label_en: formData.get("label_en") as string,
-        value: formData.get("value") as string,
-        display_order: parseInt(formData.get("display_order") as string) || 0,
-        is_public: formData.get("is_public") === "on",
-        icon: (formData.get("icon") as string) || null,
-        link_url: (formData.get("link_url") as string) || null,
+        emails: emails,
+        phone_numbers: phoneNumbers,
+        social_links: socialLinks,
+        operating_hours_id: (formData.get("operating_hours_id") as string) || null,
+        operating_hours_en: (formData.get("operating_hours_en") as string) || null,
+        address_id: (formData.get("address_id") as string) || null,
+        address_en: (formData.get("address_en") as string) || null,
         updated_at: new Date().toISOString(),
       };
 
-      const { error: updateError } = await adminClient
-        .from("contact_info")
-        .update(contactData)
-        .eq("id", id);
+      let result;
+      if (id) {
+        // Update existing
+        result = await adminClient
+          .from("contact_info")
+          .update(contactData)
+          .eq("id", id);
+      } else {
+        // Insert new
+        result = await adminClient
+          .from("contact_info")
+          .insert([{ ...contactData, status: "published" }]);
+      }
 
-      if (updateError) {
-        console.error("Update error:", updateError);
+      if (result.error) {
+        console.error("Save error:", result.error);
         return {
-          error: "Failed to update contact info: " + updateError.message,
+          error: "Failed to save contact info: " + result.error.message,
         };
       }
 
       return {
         success: true,
-        message: "Contact info updated successfully",
+        message: "Contact info saved successfully",
       };
     } catch (err) {
-      console.error("Update error:", err);
+      console.error("Save error:", err);
       return {
-        error: "Failed to update contact info",
-      };
-    }
-  },
-
-  delete: async ({ request }) => {
-    try {
-      const formData = await request.formData();
-      const id = formData.get("id") as string;
-
-      if (!id) {
-        return { error: "ID is required for delete" };
-      }
-
-      const { error: deleteError } = await adminClient
-        .from("contact_info")
-        .delete()
-        .eq("id", id);
-
-      if (deleteError) {
-        console.error("Delete error:", deleteError);
-        return {
-          error: "Failed to delete contact info: " + deleteError.message,
-        };
-      }
-
-      return {
-        success: true,
-        message: "Contact info deleted successfully",
-      };
-    } catch (err) {
-      console.error("Delete error:", err);
-      return {
-        error: "Failed to delete contact info",
+        error: "Failed to save contact info",
       };
     }
   },

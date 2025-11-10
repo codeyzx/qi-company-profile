@@ -112,40 +112,50 @@
             <div class="space-y-4">
               <h3 class="text-lg font-semibold">Indonesian Content</h3>
               <div>
-                <Label for="title_id">Title (Indonesian)</Label>
+                <Label for="main_title_id">Main Title (Indonesian)</Label>
                 <Input
-                  id="title_id"
-                  name="title_id"
-                  value={editingAbout?.title_id || ""}
+                  id="main_title_id"
+                  name="main_title_id"
+                  value={editingAbout?.main_title_id || ""}
                   required
                   disabled={loading}
-                  placeholder="e.g., Tentang Kami"
+                  placeholder="e.g., Siapa Kami ?"
                 />
               </div>
 
               <div>
-                <Label for="content_id">Content (Indonesian)</Label>
+                <Label for="main_description_id">Main Description (Indonesian)</Label>
                 <Textarea
-                  id="content_id"
-                  name="content_id"
-                  value={editingAbout?.content_id || ""}
+                  id="main_description_id"
+                  name="main_description_id"
+                  value={editingAbout?.main_description_id || ""}
                   required
                   disabled={loading}
-                  rows={5}
-                  placeholder="Describe your company in Indonesian"
+                  rows={3}
+                  placeholder="Short description about your company"
                 />
               </div>
 
               <div>
-                <Label for="highlight_text_id"
-                  >Highlight Text (Indonesian)</Label
-                >
-                <Input
-                  id="highlight_text_id"
-                  name="highlight_text_id"
-                  value={editingAbout?.highlight_text_id || ""}
+                <Label for="secondary_description_id">Secondary Description (Indonesian)</Label>
+                <Textarea
+                  id="secondary_description_id"
+                  name="secondary_description_id"
+                  value={editingAbout?.secondary_description_id || ""}
                   disabled={loading}
-                  placeholder="e.g., Inovasi Terdepan"
+                  rows={4}
+                  placeholder="Detailed description about your company"
+                />
+              </div>
+
+              <div>
+                <Label for="slogan_id">Slogan (Indonesian)</Label>
+                <Input
+                  id="slogan_id"
+                  name="slogan_id"
+                  value={editingAbout?.slogan_id || ""}
+                  disabled={loading}
+                  placeholder="e.g., Explore the Game Universe"
                 />
               </div>
             </div>
@@ -154,39 +164,104 @@
             <div class="space-y-4">
               <h3 class="text-lg font-semibold">English Content</h3>
               <div>
-                <Label for="title_en">Title (English)</Label>
+                <Label for="main_title_en">Main Title (English)</Label>
                 <Input
-                  id="title_en"
-                  name="title_en"
-                  value={editingAbout?.title_en || ""}
+                  id="main_title_en"
+                  name="main_title_en"
+                  value={editingAbout?.main_title_en || ""}
                   required
                   disabled={loading}
-                  placeholder="e.g., About Us"
+                  placeholder="e.g., Who Are We ?"
                 />
               </div>
 
               <div>
-                <Label for="content_en">Content (English)</Label>
+                <Label for="main_description_en">Main Description (English)</Label>
                 <Textarea
-                  id="content_en"
-                  name="content_en"
-                  value={editingAbout?.content_en || ""}
+                  id="main_description_en"
+                  name="main_description_en"
+                  value={editingAbout?.main_description_en || ""}
                   required
                   disabled={loading}
-                  rows={5}
-                  placeholder="Describe your company in English"
+                  rows={3}
+                  placeholder="Short description about your company"
                 />
               </div>
 
               <div>
-                <Label for="highlight_text_en">Highlight Text (English)</Label>
-                <Input
-                  id="highlight_text_en"
-                  name="highlight_text_en"
-                  value={editingAbout?.highlight_text_en || ""}
+                <Label for="secondary_description_en">Secondary Description (English)</Label>
+                <Textarea
+                  id="secondary_description_en"
+                  name="secondary_description_en"
+                  value={editingAbout?.secondary_description_en || ""}
                   disabled={loading}
-                  placeholder="e.g., Leading Innovation"
+                  rows={4}
+                  placeholder="Detailed description about your company"
                 />
+              </div>
+
+              <div>
+                <Label for="slogan_en">Slogan (English)</Label>
+                <Input
+                  id="slogan_en"
+                  name="slogan_en"
+                  value={editingAbout?.slogan_en || ""}
+                  disabled={loading}
+                  placeholder="e.g., Explore the Game Universe"
+                />
+              </div>
+            </div>
+
+            <!-- Values (JSON) -->
+            <div class="space-y-4">
+              <h3 class="text-lg font-semibold">Values (JSON Format)</h3>
+              <div>
+                <Label for="values">Values JSON</Label>
+                <Textarea
+                  id="values"
+                  name="values"
+                  value={editingAbout?.values ? JSON.stringify(editingAbout.values, null, 2) : ""}
+                  disabled={loading}
+                  rows={10}
+                  placeholder={`[
+  {
+    "icon": "Target",
+    "title_id": "Fokus Kualitas",
+    "title_en": "Quality Focus",
+    "description_id": "Setiap konten kami dibuat dengan riset mendalam",
+    "description_en": "Every content we create is made with deep research"
+  }
+]`}
+                />
+                <p class="text-xs text-muted-foreground mt-1">
+                  Format: Array of objects with icon, title_id, title_en, description_id, description_en
+                </p>
+              </div>
+            </div>
+
+            <!-- Stats (JSON) -->
+            <div class="space-y-4">
+              <h3 class="text-lg font-semibold">Stats (JSON Format)</h3>
+              <div>
+                <Label for="stats">Stats JSON</Label>
+                <Textarea
+                  id="stats"
+                  name="stats"
+                  value={editingAbout?.stats ? JSON.stringify(editingAbout.stats, null, 2) : ""}
+                  disabled={loading}
+                  rows={8}
+                  placeholder={`[
+  {
+    "value": "500+",
+    "label_id": "Artikel Published",
+    "label_en": "Articles Published",
+    "color": "jgYellow"
+  }
+]`}
+                />
+                <p class="text-xs text-muted-foreground mt-1">
+                  Format: Array of objects with value, label_id, label_en, color (jgYellow or jgPurple)
+                </p>
               </div>
             </div>
 
@@ -274,16 +349,16 @@
                       <FileText class="h-5 w-5 text-muted-foreground" />
                     {/if}
                     <div>
-                      <p class="font-medium">{about.title_en}</p>
+                      <p class="font-medium">{about.main_title_en}</p>
                       <p class="text-sm text-muted-foreground">
-                        {about.section_key}
+                        {about.main_title_id}
                       </p>
                     </div>
                   </div>
                 </TableCell>
                 <TableCell>
                   <p class="text-sm line-clamp-2 max-w-md">
-                    {about.content_en.substring(0, 100)}...
+                    {about.main_description_en?.substring(0, 100)}...
                   </p>
                 </TableCell>
                 <TableCell>

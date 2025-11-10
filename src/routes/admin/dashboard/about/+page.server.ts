@@ -29,16 +29,41 @@ export const actions: Actions = {
     try {
       const formData = await request.formData();
 
+      // Parse JSON fields
+      let values = null;
+      let stats = null;
+
+      const valuesStr = formData.get("values") as string;
+      const statsStr = formData.get("stats") as string;
+
+      if (valuesStr && valuesStr.trim()) {
+        try {
+          values = JSON.parse(valuesStr);
+        } catch (e) {
+          return { error: "Invalid JSON format for values field" };
+        }
+      }
+
+      if (statsStr && statsStr.trim()) {
+        try {
+          stats = JSON.parse(statsStr);
+        } catch (e) {
+          return { error: "Invalid JSON format for stats field" };
+        }
+      }
+
       const aboutData = {
-        main_title_id: formData.get("title_id") as string,
-        main_title_en: formData.get("title_en") as string,
-        main_description_id: formData.get("content_id") as string,
-        main_description_en: formData.get("content_en") as string,
-        slogan_id: (formData.get("highlight_text_id") as string) || null,
-        slogan_en: (formData.get("highlight_text_en") as string) || null,
+        main_title_id: formData.get("main_title_id") as string,
+        main_title_en: formData.get("main_title_en") as string,
+        main_description_id: formData.get("main_description_id") as string,
+        main_description_en: formData.get("main_description_en") as string,
+        secondary_description_id: (formData.get("secondary_description_id") as string) || null,
+        secondary_description_en: (formData.get("secondary_description_en") as string) || null,
+        slogan_id: (formData.get("slogan_id") as string) || null,
+        slogan_en: (formData.get("slogan_en") as string) || null,
         image_url: (formData.get("image_url") as string) || null,
-        values: null,
-        stats: null,
+        values: values,
+        stats: stats,
         status: "published",
       };
 
@@ -74,14 +99,41 @@ export const actions: Actions = {
         return { error: "ID is required for update" };
       }
 
+      // Parse JSON fields
+      let values = null;
+      let stats = null;
+
+      const valuesStr = formData.get("values") as string;
+      const statsStr = formData.get("stats") as string;
+
+      if (valuesStr && valuesStr.trim()) {
+        try {
+          values = JSON.parse(valuesStr);
+        } catch (e) {
+          return { error: "Invalid JSON format for values field" };
+        }
+      }
+
+      if (statsStr && statsStr.trim()) {
+        try {
+          stats = JSON.parse(statsStr);
+        } catch (e) {
+          return { error: "Invalid JSON format for stats field" };
+        }
+      }
+
       const aboutData = {
-        main_title_id: formData.get("title_id") as string,
-        main_title_en: formData.get("title_en") as string,
-        main_description_id: formData.get("content_id") as string,
-        main_description_en: formData.get("content_en") as string,
-        slogan_id: (formData.get("highlight_text_id") as string) || null,
-        slogan_en: (formData.get("highlight_text_en") as string) || null,
+        main_title_id: formData.get("main_title_id") as string,
+        main_title_en: formData.get("main_title_en") as string,
+        main_description_id: formData.get("main_description_id") as string,
+        main_description_en: formData.get("main_description_en") as string,
+        secondary_description_id: (formData.get("secondary_description_id") as string) || null,
+        secondary_description_en: (formData.get("secondary_description_en") as string) || null,
+        slogan_id: (formData.get("slogan_id") as string) || null,
+        slogan_en: (formData.get("slogan_en") as string) || null,
         image_url: (formData.get("image_url") as string) || null,
+        values: values,
+        stats: stats,
         updated_at: new Date().toISOString(),
       };
 

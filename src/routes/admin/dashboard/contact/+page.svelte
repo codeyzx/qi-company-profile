@@ -8,78 +8,23 @@
   } from "$lib/components/ui/card";
   import { Input } from "$lib/components/ui/input";
   import { Label } from "$lib/components/ui/label";
-  import { Badge } from "$lib/components/ui/badge";
-  import {
-    Dialog,
-    DialogContent,
-    DialogHeader,
-    DialogTitle,
-    DialogTrigger,
-  } from "$lib/components/ui/dialog";
-  import {
-    Table,
-    TableBody,
-    TableCell,
-    TableHead,
-    TableHeader,
-    TableRow,
-  } from "$lib/components/ui/table";
+  import { Textarea } from "$lib/components/ui/textarea";
   import { Alert, AlertDescription } from "$lib/components/ui/alert";
-  import { Checkbox } from "$lib/components/ui/checkbox";
   import {
-    Plus,
-    Edit,
-    Trash2,
     Phone,
     CheckCircle,
     AlertCircle,
     Mail,
+    Clock,
     MapPin,
-    Globe,
-    MessageCircle,
   } from "lucide-svelte";
   import { enhance } from "$app/forms";
   import type { PageData, ActionData } from "./$types";
 
   let { data, form }: { data: PageData; form: ActionData } = $props();
 
-  let showCreateDialog = $state(false);
-  let editingContact = $state<any>(null);
   let loading = $state(false);
-  let selectedType = $state("");
-  let isPublic = $state(false);
 
-  const contactTypes = [
-    { value: "email", label: "Email", icon: Mail },
-    { value: "phone", label: "Phone", icon: Phone },
-    { value: "address", label: "Address", icon: MapPin },
-    { value: "website", label: "Website", icon: Globe },
-    { value: "social", label: "Social Media", icon: MessageCircle },
-  ];
-
-  function resetForm() {
-    showCreateDialog = false;
-    editingContact = null;
-    selectedType = "";
-    isPublic = false;
-  }
-
-  function startEdit(contact: any) {
-    editingContact = { ...contact };
-    selectedType = contact.contact_type;
-    isPublic = contact.is_public;
-    showCreateDialog = true;
-  }
-
-  function getContactIcon(type: string) {
-    const contactType = contactTypes.find((t) => t.value === type);
-    return contactType?.icon || Phone;
-  }
-
-  function getContactTypeLabel(type: string) {
-    const contactType = contactTypes.find((t) => t.value === type);
-    return contactType?.label || type;
-  }
 </script>
 
 <svelte:head>
@@ -92,173 +37,6 @@
       <h1 class="text-3xl font-bold">Contact Information</h1>
       <p class="text-muted-foreground">Manage your contact details</p>
     </div>
-
-    <Dialog bind:open={showCreateDialog} onOpenChange={resetForm}>
-      <DialogTrigger>
-        <Button
-          class="bg-gradient-to-r from-jgYellow to-jgYellow/90 hover:from-jgYellow/90 hover:to-jgYellow text-black font-semibold"
-        >
-          <Plus class="mr-2 h-4 w-4" />
-          Add Contact
-        </Button>
-      </DialogTrigger>
-      <DialogContent class="max-w-2xl max-h-[90vh] overflow-y-auto">
-        <DialogHeader>
-          <DialogTitle>
-            {editingContact ? "Edit Contact Info" : "Create New Contact Info"}
-          </DialogTitle>
-        </DialogHeader>
-
-        <form
-          method="POST"
-          action={editingContact ? "?/update" : "?/create"}
-          use:enhance
-        >
-          {#if editingContact}
-            <input type="hidden" name="id" value={editingContact.id} />
-          {/if}
-
-          <div class="space-y-6">
-            <!-- Contact Type and Settings -->
-            <div class="space-y-4">
-              <h3 class="text-lg font-semibold">Settings</h3>
-              <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div>
-                  <Label for="contact_type">Contact Type</Label>
-                  <select
-                    name="contact_type"
-                    bind:value={selectedType}
-                    disabled={loading}
-                    class="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
-                  >
-                    <option value="">Select contact type</option>
-                    {#each contactTypes as type}
-                      <option value={type.value}>{type.label}</option>
-                    {/each}
-                  </select>
-                </div>
-
-                <div>
-                  <Label for="display_order">Display Order</Label>
-                  <Input
-                    id="display_order"
-                    name="display_order"
-                    type="number"
-                    value={editingContact?.display_order || 0}
-                    disabled={loading}
-                    min="0"
-                  />
-                </div>
-              </div>
-
-              <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div>
-                  <Label for="icon">Icon (Lucide name)</Label>
-                  <Input
-                    id="icon"
-                    name="icon"
-                    value={editingContact?.icon || ""}
-                    disabled={loading}
-                    placeholder="e.g., Phone, Mail, MapPin"
-                  />
-                </div>
-
-                <div class="flex items-center space-x-2 mt-6">
-                  <Checkbox
-                    id="is_public"
-                    name="is_public"
-                    checked={isPublic}
-                    onCheckedChange={(checked) => (isPublic = checked)}
-                  />
-                  <Label for="is_public">Public (visible to visitors)</Label>
-                </div>
-              </div>
-            </div>
-
-            <!-- Indonesian Fields -->
-            <div class="space-y-4">
-              <h3 class="text-lg font-semibold">Indonesian Content</h3>
-              <div>
-                <Label for="label_id">Label (Indonesian)</Label>
-                <Input
-                  id="label_id"
-                  name="label_id"
-                  value={editingContact?.label_id || ""}
-                  required
-                  disabled={loading}
-                  placeholder="e.g., Telepon, Email, Alamat"
-                />
-              </div>
-            </div>
-
-            <!-- English Fields -->
-            <div class="space-y-4">
-              <h3 class="text-lg font-semibold">English Content</h3>
-              <div>
-                <Label for="label_en">Label (English)</Label>
-                <Input
-                  id="label_en"
-                  name="label_en"
-                  value={editingContact?.label_en || ""}
-                  required
-                  disabled={loading}
-                  placeholder="e.g., Phone, Email, Address"
-                />
-              </div>
-            </div>
-
-            <!-- Contact Value and Link -->
-            <div class="space-y-4">
-              <h3 class="text-lg font-semibold">Contact Details</h3>
-              <div>
-                <Label for="value">Contact Value</Label>
-                <Input
-                  id="value"
-                  name="value"
-                  value={editingContact?.value || ""}
-                  required
-                  disabled={loading}
-                  placeholder="e.g., +62123456789, hello@company.com, Street Address"
-                />
-              </div>
-
-              <div>
-                <Label for="link_url">Link URL (optional)</Label>
-                <Input
-                  id="link_url"
-                  name="link_url"
-                  value={editingContact?.link_url || ""}
-                  disabled={loading}
-                  placeholder="e.g., tel:+62123456789, mailto:hello@company.com"
-                />
-              </div>
-            </div>
-
-            <div class="flex justify-between gap-4">
-              <Button
-                type="button"
-                variant="outline"
-                onclick={resetForm}
-                disabled={loading}
-              >
-                Cancel
-              </Button>
-              <Button
-                type="submit"
-                class="bg-jgYellow hover:bg-jgYellow/90 text-black"
-                disabled={loading}
-              >
-                {loading
-                  ? "Saving..."
-                  : editingContact
-                    ? "Update Contact"
-                    : "Create Contact"}
-              </Button>
-            </div>
-          </div>
-        </form>
-      </DialogContent>
-    </Dialog>
   </div>
 
   {#if form?.success}
@@ -283,105 +61,158 @@
     <CardHeader>
       <CardTitle class="flex items-center gap-2">
         <Phone class="size-5 text-jgYellow" />
-        Contact Information ({data.contactInfo.length})
+        Contact Information
       </CardTitle>
     </CardHeader>
     <CardContent>
-      {#if data.contactInfo.length === 0}
-        <div class="text-center py-12">
-          <Phone class="mx-auto h-12 w-12 text-muted-foreground/50" />
-          <p class="mt-4 text-lg font-medium">No contact info yet</p>
-          <p class="text-muted-foreground">
-            Add your first contact information to get started.
-          </p>
+      <form method="POST" action="?/update" use:enhance class="space-y-8">
+        {#if data.contactInfo}
+          <input type="hidden" name="id" value={data.contactInfo.id} />
+        {/if}
+
+        <!-- Emails -->
+        <div class="space-y-4">
+          <div class="flex items-center gap-2">
+            <Mail class="h-5 w-5 text-jgYellow" />
+            <h3 class="text-lg font-semibold">Email Addresses</h3>
+          </div>
+          <div>
+            <Label for="emails">Emails (one per line)</Label>
+            <Textarea
+              id="emails"
+              name="emails"
+              value={data.contactInfo?.emails?.join('\n') || ""}
+              disabled={loading}
+              rows={3}
+              placeholder="hello@jelajahgame.com&#10;support@jelajahgame.com"
+            />
+            <p class="text-xs text-muted-foreground mt-1">
+              Enter each email address on a new line
+            </p>
+          </div>
         </div>
-      {:else}
-        <Table>
-          <TableHeader>
-            <TableRow>
-              <TableHead>Contact</TableHead>
-              <TableHead>Type</TableHead>
-              <TableHead>Value</TableHead>
-              <TableHead>Order</TableHead>
-              <TableHead>Visibility</TableHead>
-              <TableHead class="text-right">Actions</TableHead>
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            {#each data.contactInfo as contact}
-              <TableRow>
-                <TableCell>
-                  <div class="flex items-center gap-2">
-                    {#each [getContactIcon(contact.contact_type)] as IconComponent}
-                      <IconComponent class="h-5 w-5 text-jgYellow" />
-                    {/each}
-                    <div>
-                      <p class="font-medium">{contact.label_en}</p>
-                      <p class="text-sm text-muted-foreground">
-                        {contact.label_id}
-                      </p>
-                    </div>
-                  </div>
-                </TableCell>
-                <TableCell>
-                  <Badge variant="outline"
-                    >{getContactTypeLabel(contact.contact_type)}</Badge
-                  >
-                </TableCell>
-                <TableCell>
-                  {#if contact.link_url}
-                    <a
-                      href={contact.link_url}
-                      class="text-blue-600 hover:underline"
-                    >
-                      {contact.value}
-                    </a>
-                  {:else}
-                    {contact.value}
-                  {/if}
-                </TableCell>
-                <TableCell>{contact.display_order}</TableCell>
-                <TableCell>
-                  <Badge variant={contact.is_public ? "default" : "secondary"}>
-                    {contact.is_public ? "Public" : "Private"}
-                  </Badge>
-                </TableCell>
-                <TableCell class="text-right">
-                  <div class="flex items-center justify-end gap-2">
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      onclick={() => startEdit(contact)}
-                    >
-                      <Edit class="h-4 w-4" />
-                    </Button>
-                    <form method="POST" action="?/delete" use:enhance>
-                      <input type="hidden" name="id" value={contact.id} />
-                      <Button
-                        type="submit"
-                        variant="outline"
-                        size="sm"
-                        class="text-red-600 hover:text-red-700 hover:bg-red-50"
-                        onclick={(e) => {
-                          if (
-                            !confirm(
-                              "Are you sure you want to delete this contact info?"
-                            )
-                          ) {
-                            e.preventDefault();
-                          }
-                        }}
-                      >
-                        <Trash2 class="h-4 w-4" />
-                      </Button>
-                    </form>
-                  </div>
-                </TableCell>
-              </TableRow>
-            {/each}
-          </TableBody>
-        </Table>
-      {/if}
+
+        <!-- Phone Numbers -->
+        <div class="space-y-4">
+          <div class="flex items-center gap-2">
+            <Phone class="h-5 w-5 text-jgYellow" />
+            <h3 class="text-lg font-semibold">Phone Numbers</h3>
+          </div>
+          <div>
+            <Label for="phone_numbers">Phone Numbers (one per line)</Label>
+            <Textarea
+              id="phone_numbers"
+              name="phone_numbers"
+              value={data.contactInfo?.phone_numbers?.join('\n') || ""}
+              disabled={loading}
+              rows={3}
+              placeholder="+62 21 1234 5678&#10;+62 812 3456 7890"
+            />
+            <p class="text-xs text-muted-foreground mt-1">
+              Enter each phone number on a new line
+            </p>
+          </div>
+        </div>
+
+        <!-- Social Links -->
+        <div class="space-y-4">
+          <h3 class="text-lg font-semibold">Social Media Links</h3>
+          <div>
+            <Label for="social_links">Social Links (JSON Format)</Label>
+            <Textarea
+              id="social_links"
+              name="social_links"
+              value={data.contactInfo?.social_links 
+                ? JSON.stringify(data.contactInfo.social_links, null, 2) 
+                : ""}
+              disabled={loading}
+              rows={6}
+              placeholder={`{
+  "instagram": "https://instagram.com/jelajahgame",
+  "youtube": "https://youtube.com/@jelajahgame",
+  "tiktok": "https://tiktok.com/@jelajahgame"
+}`}
+            />
+            <p class="text-xs text-muted-foreground mt-1">
+              Format: JSON object with platform name as key and URL as value
+            </p>
+          </div>
+        </div>
+
+        <!-- Operating Hours -->
+        <div class="space-y-4">
+          <div class="flex items-center gap-2">
+            <Clock class="h-5 w-5 text-jgYellow" />
+            <h3 class="text-lg font-semibold">Operating Hours</h3>
+          </div>
+          <div class="grid gap-4">
+            <div>
+              <Label for="operating_hours_id">Operating Hours (Indonesian)</Label>
+              <Textarea
+                id="operating_hours_id"
+                name="operating_hours_id"
+                value={data.contactInfo?.operating_hours_id || ""}
+                disabled={loading}
+                rows={4}
+                placeholder="Senin - Jumat: 09:00 - 18:00 WIB&#10;Sabtu: 10:00 - 15:00 WIB&#10;Minggu: Libur"
+              />
+            </div>
+            <div>
+              <Label for="operating_hours_en">Operating Hours (English)</Label>
+              <Textarea
+                id="operating_hours_en"
+                name="operating_hours_en"
+                value={data.contactInfo?.operating_hours_en || ""}
+                disabled={loading}
+                rows={4}
+                placeholder="Monday - Friday: 09:00 - 18:00 WIB&#10;Saturday: 10:00 - 15:00 WIB&#10;Sunday: Closed"
+              />
+            </div>
+          </div>
+        </div>
+
+        <!-- Address -->
+        <div class="space-y-4">
+          <div class="flex items-center gap-2">
+            <MapPin class="h-5 w-5 text-jgYellow" />
+            <h3 class="text-lg font-semibold">Address (Optional)</h3>
+          </div>
+          <div class="grid gap-4">
+            <div>
+              <Label for="address_id">Address (Indonesian)</Label>
+              <Textarea
+                id="address_id"
+                name="address_id"
+                value={data.contactInfo?.address_id || ""}
+                disabled={loading}
+                rows={3}
+                placeholder="Jl. Contoh No. 123, Jakarta, Indonesia"
+              />
+            </div>
+            <div>
+              <Label for="address_en">Address (English)</Label>
+              <Textarea
+                id="address_en"
+                name="address_en"
+                value={data.contactInfo?.address_en || ""}
+                disabled={loading}
+                rows={3}
+                placeholder="123 Example Street, Jakarta, Indonesia"
+              />
+            </div>
+          </div>
+        </div>
+
+        <div class="flex justify-end">
+          <Button
+            type="submit"
+            class="bg-gradient-to-r from-jgYellow to-jgYellow/90 hover:from-jgYellow/90 hover:to-jgYellow text-black font-semibold"
+            disabled={loading}
+          >
+            {loading ? "Saving..." : "Save Contact Information"}
+          </Button>
+        </div>
+      </form>
     </CardContent>
   </Card>
 </div>
