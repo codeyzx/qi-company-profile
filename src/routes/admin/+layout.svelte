@@ -1,5 +1,6 @@
 <script lang="ts">
   import DashboardSidebar from "$lib/components/admin/DashboardSidebar.svelte";
+  import { Toaster } from "$lib/components/ui/sonner";
   import type { LayoutData } from "./$types";
 
   let { data, children }: { data: LayoutData; children: any } = $props();
@@ -49,3 +50,4 @@
     }
   }
 </style>
+<Toaster />

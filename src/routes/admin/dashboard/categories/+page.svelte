@@ -33,30 +33,105 @@
     Layers,
     CheckCircle,
     AlertCircle,
+    Loader2,
   } from "lucide-svelte";
   import { enhance } from "$app/forms";
+  import { goto, invalidateAll } from "$app/navigation";
+  import { toast } from "svelte-sonner";
   import type { PageData, ActionData } from "./$types";
 
   let { data, form }: { data: PageData; form: ActionData } = $props();
 
   let showCreateDialog = $state(false);
   let editingCategory = $state<any>(null);
-  let loading = $state(false);
+  let isSubmitting = $state(false);
+  let formElement = $state<HTMLFormElement>();
+
+  // Watch for form success/error and handle accordingly
+  $effect(() => {
+    if (form?.success) {
+      resetForm();
+      isSubmitting = false;
+      toast.success(form.message || "Category saved successfully!");
+    } else if (form?.error) {
+      isSubmitting = false;
+      toast.error(form.error || "An error occurred. Please try again.");
+    }
+  });
 
   function resetForm() {
     showCreateDialog = false;
     editingCategory = null;
+    if (formElement) {
+      formElement.reset();
+    }
   }
 
   function startEdit(category: any) {
     editingCategory = { ...category };
     showCreateDialog = true;
   }
+
+  function handleDialogOpenChange(open: boolean) {
+    if (!open && !isSubmitting) {
+      resetForm();
+    }
+  }
+
+  // Handle keyboard shortcuts
+  function handleKeydown(event: KeyboardEvent) {
+    // Escape to close dialog
+    if (event.key === "Escape" && showCreateDialog && !isSubmitting) {
+      resetForm();
+      event.preventDefault();
+    }
+    // Ctrl+S or Cmd+S to save form
+    if (
+      (event.ctrlKey || event.metaKey) &&
+      event.key === "s" &&
+      showCreateDialog
+    ) {
+      event.preventDefault();
+      if (formElement && !isSubmitting) {
+        formElement.requestSubmit();
+      }
+    }
+  }
+
+  function handleFormSubmit() {
+    return async ({ formElement, formData, action, cancel }: any) => {
+      // Basic client-side validation
+      const titleId = formData.get("title_id")?.toString().trim();
+      const titleEn = formData.get("title_en")?.toString().trim();
+      const descriptionId = formData.get("description_id")?.toString().trim();
+      const descriptionEn = formData.get("description_en")?.toString().trim();
+
+      if (!titleId || !titleEn || !descriptionId || !descriptionEn) {
+        toast.error("Title and description are required in both languages");
+        cancel();
+        return;
+      }
+
+      isSubmitting = true;
+
+      return async ({ result, update }: any) => {
+        if (result.type === "success") {
+          await invalidateAll();
+          await update({ reset: false });
+        } else {
+          await update();
+        }
+        isSubmitting = false;
+      };
+    };
+  }
 </script>
 
 <svelte:head>
   <title>Categories - Admin Dashboard</title>
 </svelte:head>
+
+<svelte:window onkeydown={handleKeydown} />
 
 <div class="space-y-6">
   <div class="flex items-center justify-between">
@@ -65,10 +140,11 @@
       <p class="text-muted-foreground">Manage your game categories</p>
     </div>
 
-    <Dialog bind:open={showCreateDialog} onOpenChange={resetForm}>
+    <Dialog bind:open={showCreateDialog} onOpenChange={handleDialogOpenChange}>
       <DialogTrigger>
         <Button
           class="bg-gradient-to-r from-jgYellow to-jgYellow/90 hover:from-jgYellow/90 hover:to-jgYellow text-black font-semibold"
+          disabled={isSubmitting}
         >
           <Plus class="mr-2 h-4 w-4" />
           Add Category
@@ -82,9 +158,10 @@
         </DialogHeader>
 
         <form
+          bind:this={formElement}
           method="POST"
           action={editingCategory ? "?/update" : "?/create"}
-          use:enhance
+          use:enhance={handleFormSubmit()}
         >
           {#if editingCategory}
             <input type="hidden" name="id" value={editingCategory.id} />
@@ -101,7 +178,7 @@
                   name="title_id"
                   value={editingCategory?.title_id || ""}
                   required
-                  disabled={loading}
+                  disabled={isSubmitting}
                   placeholder="e.g., Game Aksi"
                 />
               </div>
@@ -113,7 +190,7 @@
                   name="description_id"
                   value={editingCategory?.description_id || ""}
                   required
-                  disabled={loading}
+                  disabled={isSubmitting}
                   rows={3}
                   placeholder="Describe the category in Indonesian"
                 />
@@ -125,7 +202,7 @@
                   id="badge_id"
                   name="badge_id"
                   value={editingCategory?.badge_id || ""}
-                  disabled={loading}
+                  disabled={isSubmitting}
                   placeholder="e.g., Populer"
                 />
               </div>
@@ -136,7 +213,7 @@
                   id="count_text_id"
                   name="count_text_id"
                   value={editingCategory?.count_text_id || ""}
-                  disabled={loading}
+                  disabled={isSubmitting}
                   placeholder="e.g., Game Tersedia"
                 />
               </div>
@@ -152,7 +229,7 @@
                   name="title_en"
                   value={editingCategory?.title_en || ""}
                   required
-                  disabled={loading}
+                  disabled={isSubmitting}
                   placeholder="e.g., Action Games"
                 />
               </div>
@@ -164,7 +241,7 @@
                   name="description_en"
                   value={editingCategory?.description_en || ""}
                   required
-                  disabled={loading}
+                  disabled={isSubmitting}
                   rows={3}
                   placeholder="Describe the category in English"
                 />
@@ -176,7 +253,7 @@
                   id="badge_en"
                   name="badge_en"
                   value={editingCategory?.badge_en || ""}
-                  disabled={loading}
+                  disabled={isSubmitting}
                   placeholder="e.g., Popular"
                 />
               </div>
@@ -187,7 +264,7 @@
                   id="count_text_en"
                   name="count_text_en"
                   value={editingCategory?.count_text_en || ""}
-                  disabled={loading}
+                  disabled={isSubmitting}
                   placeholder="e.g., Games Available"
                 />
               </div>
@@ -203,7 +280,7 @@
                     id="icon"
                     name="icon"
                     value={editingCategory?.icon || ""}
-                    disabled={loading}
+                    disabled={isSubmitting}
                     placeholder="e.g., Zap, Gamepad2, Trophy"
                   />
                 </div>
@@ -215,7 +292,7 @@
                     name="sort_order"
                     type="number"
                     value={editingCategory?.sort_order || 0}
-                    disabled={loading}
+                    disabled={isSubmitting}
                     min="0"
                   />
                 </div>
@@ -229,7 +306,7 @@
                     name="gradient_from"
                     type="color"
                     value={editingCategory?.gradient_from || "#F5CB3B"}
-                    disabled={loading}
+                    disabled={isSubmitting}
                   />
                 </div>
 
@@ -240,7 +317,7 @@
                     name="gradient_to"
                     type="color"
                     value={editingCategory?.gradient_to || "#322F81"}
-                    disabled={loading}
+                    disabled={isSubmitting}
                   />
                 </div>
               </div>
@@ -251,20 +328,25 @@
                 type="button"
                 variant="outline"
                 onclick={resetForm}
-                disabled={loading}
+                disabled={isSubmitting}
               >
                 Cancel
               </Button>
               <Button
                 type="submit"
                 class="bg-jgYellow hover:bg-jgYellow/90 text-black"
-                disabled={loading}
+                disabled={isSubmitting}
               >
-                {loading
-                  ? "Saving..."
-                  : editingCategory
-                    ? "Update Category"
-                    : "Create Category"}
+                {#if isSubmitting}
+                  <Loader2 class="mr-2 h-4 w-4 animate-spin" />
+                  Saving...
+                {:else if editingCategory}
+                  <Edit class="mr-2 h-4 w-4" />
+                  Update Category
+                {:else}
+                  <Plus class="mr-2 h-4 w-4" />
+                  Create Category
+                {/if}
               </Button>
             </div>
           </div>
@@ -273,23 +355,7 @@
     </Dialog>
   </div>
 
-  {#if form?.success}
-    <Alert class="border-green-500 bg-green-50">
-      <CheckCircle class="h-4 w-4 text-green-600" />
-      <AlertDescription class="text-green-800">
-        {form.message}
-      </AlertDescription>
-    </Alert>
-  {/if}
-
-  {#if form?.error}
-    <Alert class="border-red-500 bg-red-50">
-      <AlertCircle class="h-4 w-4 text-red-600" />
-      <AlertDescription class="text-red-800">
-        {form.error}
-      </AlertDescription>
-    </Alert>
-  {/if}
+  <!-- Alerts are now handled by toast notifications -->
 
   <Card>
     <CardHeader>

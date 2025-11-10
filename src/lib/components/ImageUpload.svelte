@@ -37,7 +37,7 @@
       formData.append("bucket", bucket);
       formData.append("folder", folder);
 
-      const response = await fetch("/api/upload", {
+      const response = await fetch("/upload-file", {
         method: "POST",
         body: formData,
       });
@@ -62,7 +62,7 @@
     if (!value) return;
 
     try {
-      const response = await fetch("/api/upload", {
+      const response = await fetch("/upload-file", {
         method: "DELETE",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ url: value, bucket }),
