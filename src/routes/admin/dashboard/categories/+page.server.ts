@@ -22,26 +22,40 @@ export const actions: Actions = {
     if (!user) return fail(401, { error: "Unauthorized" });
 
     const formData = await request.formData();
+
+    // Validate required fields
+    const titleId = formData.get("title_id") as string;
+    const titleEn = formData.get("title_en") as string;
+    const descriptionId = formData.get("description_id") as string;
+    const descriptionEn = formData.get("description_en") as string;
+
+    if (!titleId || !titleEn || !descriptionId || !descriptionEn) {
+      return fail(400, {
+        error: "Title and description are required in both languages",
+      });
+    }
+
     const data = {
-      title_id: formData.get("title_id") as string,
-      title_en: formData.get("title_en") as string,
-      description_id: formData.get("description_id") as string,
-      description_en: formData.get("description_en") as string,
-      icon: formData.get("icon") as string,
-      badge_id: formData.get("badge_id") as string,
-      badge_en: formData.get("badge_en") as string,
-      count_text_id: formData.get("count_text_id") as string,
-      count_text_en: formData.get("count_text_en") as string,
+      title_id: titleId,
+      title_en: titleEn,
+      description_id: descriptionId,
+      description_en: descriptionEn,
+      icon: (formData.get("icon") as string) || null,
+      badge_id: (formData.get("badge_id") as string) || null,
+      badge_en: (formData.get("badge_en") as string) || null,
+      count_text_id: (formData.get("count_text_id") as string) || null,
+      count_text_en: (formData.get("count_text_en") as string) || null,
       gradient_from: (formData.get("gradient_from") as string) || "#F5CB3B",
       gradient_to: (formData.get("gradient_to") as string) || "#322F81",
       sort_order: parseInt(formData.get("sort_order") as string) || 0,
-      status: "published",
+      status: "published" as const,
       updated_by: user.id,
     };
 
     const { error } = await adminClient.from("game_categories").insert([data]);
 
     if (error) {
+      console.error("Error creating category:", error);
       return fail(500, { error: error.message });
     }
 
@@ -54,19 +68,35 @@ export const actions: Actions = {
     const formData = await request.formData();
     const id = formData.get("id") as string;
 
+    if (!id) {
+      return fail(400, { error: "Category ID is required" });
+    }
+
+    // Validate required fields
+    const titleId = formData.get("title_id") as string;
+    const titleEn = formData.get("title_en") as string;
+    const descriptionId = formData.get("description_id") as string;
+    const descriptionEn = formData.get("description_en") as string;
+
+    if (!titleId || !titleEn || !descriptionId || !descriptionEn) {
+      return fail(400, {
+        error: "Title and description are required in both languages",
+      });
+    }
+
     const data = {
-      title_id: formData.get("title_id") as string,
-      title_en: formData.get("title_en") as string,
-      description_id: formData.get("description_id") as string,
-      description_en: formData.get("description_en") as string,
-      icon: formData.get("icon") as string,
-      badge_id: formData.get("badge_id") as string,
-      badge_en: formData.get("badge_en") as string,
-      count_text_id: formData.get("count_text_id") as string,
-      count_text_en: formData.get("count_text_en") as string,
-      gradient_from: formData.get("gradient_from") as string,
-      gradient_to: formData.get("gradient_to") as string,
-      sort_order: parseInt(formData.get("sort_order") as string),
+      title_id: titleId,
+      title_en: titleEn,
+      description_id: descriptionId,
+      description_en: descriptionEn,
+      icon: (formData.get("icon") as string) || null,
+      badge_id: (formData.get("badge_id") as string) || null,
+      badge_en: (formData.get("badge_en") as string) || null,
+      count_text_id: (formData.get("count_text_id") as string) || null,
+      count_text_en: (formData.get("count_text_en") as string) || null,
+      gradient_from: (formData.get("gradient_from") as string) || "#F5CB3B",
+      gradient_to: (formData.get("gradient_to") as string) || "#322F81",
+      sort_order: parseInt(formData.get("sort_order") as string) || 0,
       updated_by: user.id,
     };
 
@@ -76,6 +106,7 @@ export const actions: Actions = {
       .eq("id", id);
 
     if (error) {
+      console.error("Error updating category:", error);
       return fail(500, { error: error.message });
     }
 
@@ -88,14 +119,18 @@ export const actions: Actions = {
     const formData = await request.formData();
     const id = formData.get("id") as string;
 
-    if (!id) return fail(400, { error: "Category ID required" });
+    if (!id) {
+      return fail(400, { error: "Category ID is required" });
+    }
 
-    const { error } = await supabase
+    // Use admin client to ensure proper permissions
+    const { error } = await adminClient
       .from("game_categories")
       .delete()
       .eq("id", id);
 
     if (error) {
+      console.error("Error deleting category:", error);
       return fail(500, { error: error.message });
     }
 
