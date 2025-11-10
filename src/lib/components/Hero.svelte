@@ -93,6 +93,15 @@
     ];
   }
 
+  // Log data untuk debugging
+  $effect(() => {
+    console.log("Hero component - heroData updated:", {
+      title_id: heroData?.title_id,
+      title_en: heroData?.title_en,
+      updated_at: heroData?.updated_at,
+    });
+  });
+
   // Computed values with proper fallbacks and i18n integration
   const title = $derived(
     getLocalizedText(
