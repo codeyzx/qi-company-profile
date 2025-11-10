@@ -1,14 +1,19 @@
 import type { PageServerLoad } from "./$types";
 import { adminClient } from "$lib/supabase";
 
-export const load: PageServerLoad = async ({ locals: { supabase }, url }) => {
+export const load: PageServerLoad = async ({ url, setHeaders }) => {
   const isPreview = url.searchParams.get("preview") === "true";
   const locale = url.searchParams.get("locale") || "id";
+
+  // Set cache headers untuk memastikan data selalu fresh
+  setHeaders({
+    'cache-control': 'public, max-age=0, must-revalidate'
+  });
 
   // Determine status filter
   const statusFilter = isPreview ? ["draft", "published"] : ["published"];
 
-  // Fetch all content in parallel
+  // Fetch all content in parallel menggunakan adminClient
   const [
     siteConfigData,
     navbarConfigData,
@@ -18,24 +23,24 @@ export const load: PageServerLoad = async ({ locals: { supabase }, url }) => {
     aboutData,
     contactData,
   ] = await Promise.all([
-    supabase.from("site_config").select("*").in("status", statusFilter),
+    adminClient.from("site_config").select("*").in("status", statusFilter),
 
-    supabase
+    adminClient
       .from("navbar_config")
       .select("*")
       .in("status", statusFilter)
       .limit(1)
       .single(),
 
-    supabase
+    adminClient
       .from("hero_content")
       .select("*")
       .in("status", statusFilter)
-      .order("created_at", { ascending: false })
+      .order("updated_at", { ascending: false })
       .limit(1)
       .single(),
 
-    supabase
+    adminClient
       .from("news_articles")
       .select("*")
       .in("status", statusFilter)
@@ -48,20 +53,31 @@ export const load: PageServerLoad = async ({ locals: { supabase }, url }) => {
       .in("status", statusFilter)
       .order("sort_order", { ascending: true }),
 
-    supabase
+    adminClient
       .from("about_content")
       .select("*")
       .in("status", statusFilter)
       .limit(1)
       .single(),
 
-    supabase
+    adminClient
       .from("contact_info")
       .select("*")
       .in("status", statusFilter)
       .limit(1)
       .single(),
   ]);
+
+  // Log hero data untuk debugging
+  if (heroData.error) {
+    console.error("Error loading hero data:", heroData.error);
+  } else {
+    console.log("Hero data loaded:", {
+      title_id: heroData.data?.title_id,
+      title_en: heroData.data?.title_en,
+      updated_at: heroData.data?.updated_at,
+    });
+  }
 
   return {
     siteConfig: siteConfigData.data || [],

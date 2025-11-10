@@ -58,13 +58,12 @@
 
 <!-- Sidebar -->
 <div
-  class="
-  fixed inset-y-0 left-0 z-40 w-64 bg-background border-r transform transition-transform duration-200 ease-in-out
+  class="sidebar
   {isOpen ? 'translate-x-0' : '-translate-x-full'} 
-  md:translate-x-0 md:static md:inset-0
+  md:translate-x-0
 "
 >
-  <div class="flex h-full flex-col">
+  <div class="flex h-full flex-col overflow-y-auto">
     <!-- Logo -->
     <div class="flex h-16 items-center border-b px-6">
       <h1
@@ -120,3 +119,26 @@
     aria-label="Close sidebar"
   ></button>
 {/if}
+
+<style>
+  .sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    width: 16rem;
+    z-index: 40;
+    background-color: hsl(var(--background));
+    border-right: 1px solid hsl(var(--border));
+    transform: translateX(-100%);
+    transition: transform 200ms ease-in-out;
+  }
+
+  @media (min-width: 768px) {
+    .sidebar {
+      position: fixed;
+      transform: translateX(0);
+      height: 100vh;
+    }
+  }
+</style>

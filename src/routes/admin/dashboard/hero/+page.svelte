@@ -18,11 +18,54 @@
   } from "$lib/components/ui/tabs";
   import { CheckCircle, AlertCircle } from "lucide-svelte";
   import { enhance } from "$app/forms";
+  import { invalidateAll } from "$app/navigation";
   import type { PageData, ActionData } from "./$types";
 
   let { data, form }: { data: PageData; form: ActionData } = $props();
 
   let loading = $state(false);
+  
+  // State untuk form values
+  let formValues = $state({
+    title_id: data.heroContent?.title_id || "",
+    title_en: data.heroContent?.title_en || "",
+    description_id: data.heroContent?.description_id || "",
+    description_en: data.heroContent?.description_en || "",
+    badge_text_id: data.heroContent?.badge_text_id || "",
+    badge_text_en: data.heroContent?.badge_text_en || "",
+    cta_primary_text_id: data.heroContent?.cta_primary_text_id || "",
+    cta_primary_text_en: data.heroContent?.cta_primary_text_en || "",
+    cta_primary_url: data.heroContent?.cta_primary_url || "",
+    cta_secondary_text_id: data.heroContent?.cta_secondary_text_id || "",
+    cta_secondary_text_en: data.heroContent?.cta_secondary_text_en || "",
+    cta_secondary_url: data.heroContent?.cta_secondary_url || "",
+    stats: typeof data.heroContent?.stats === "string"
+      ? data.heroContent.stats
+      : JSON.stringify(data.heroContent?.stats || [], null, 2)
+  });
+
+  // Update formValues ketika data berubah
+  $effect(() => {
+    if (data.heroContent) {
+      formValues = {
+        title_id: data.heroContent.title_id || "",
+        title_en: data.heroContent.title_en || "",
+        description_id: data.heroContent.description_id || "",
+        description_en: data.heroContent.description_en || "",
+        badge_text_id: data.heroContent.badge_text_id || "",
+        badge_text_en: data.heroContent.badge_text_en || "",
+        cta_primary_text_id: data.heroContent.cta_primary_text_id || "",
+        cta_primary_text_en: data.heroContent.cta_primary_text_en || "",
+        cta_primary_url: data.heroContent.cta_primary_url || "",
+        cta_secondary_text_id: data.heroContent.cta_secondary_text_id || "",
+        cta_secondary_text_en: data.heroContent.cta_secondary_text_en || "",
+        cta_secondary_url: data.heroContent.cta_secondary_url || "",
+        stats: typeof data.heroContent.stats === "string"
+          ? data.heroContent.stats
+          : JSON.stringify(data.heroContent.stats || [], null, 2)
+      };
+    }
+  });
 </script>
 
 <svelte:head>
@@ -68,6 +111,8 @@
           return async ({ update }) => {
             await update();
             loading = false;
+            // Reload data dari server setelah update berhasil
+            await invalidateAll();
           };
         }}
       >
@@ -83,7 +128,7 @@
               <Input
                 id="title_id"
                 name="title_id"
-                value={data.heroContent?.title_id || ""}
+                bind:value={formValues.title_id}
                 required
                 disabled={loading}
               />
@@ -94,7 +139,7 @@
               <Textarea
                 id="description_id"
                 name="description_id"
-                value={data.heroContent?.description_id || ""}
+                bind:value={formValues.description_id}
                 required
                 disabled={loading}
                 rows={3}
@@ -106,7 +151,7 @@
               <Input
                 id="badge_text_id"
                 name="badge_text_id"
-                value={data.heroContent?.badge_text_id || ""}
+                bind:value={formValues.badge_text_id}
                 disabled={loading}
               />
             </div>
@@ -118,7 +163,7 @@
               <Input
                 id="cta_primary_text_id"
                 name="cta_primary_text_id"
-                value={data.heroContent?.cta_primary_text_id || ""}
+                bind:value={formValues.cta_primary_text_id}
                 disabled={loading}
                 placeholder="Baca Berita Terbaru"
               />
@@ -131,7 +176,7 @@
               <Input
                 id="cta_secondary_text_id"
                 name="cta_secondary_text_id"
-                value={data.heroContent?.cta_secondary_text_id || ""}
+                bind:value={formValues.cta_secondary_text_id}
                 disabled={loading}
                 placeholder="Explore Game Populer"
               />
@@ -144,7 +189,7 @@
               <Input
                 id="title_en"
                 name="title_en"
-                value={data.heroContent?.title_en || ""}
+                bind:value={formValues.title_en}
                 required
                 disabled={loading}
               />
@@ -155,7 +200,7 @@
               <Textarea
                 id="description_en"
                 name="description_en"
-                value={data.heroContent?.description_en || ""}
+                bind:value={formValues.description_en}
                 required
                 disabled={loading}
                 rows={3}
@@ -167,7 +212,7 @@
               <Input
                 id="badge_text_en"
                 name="badge_text_en"
-                value={data.heroContent?.badge_text_en || ""}
+                bind:value={formValues.badge_text_en}
                 disabled={loading}
               />
             </div>
@@ -178,7 +223,7 @@
               <Input
                 id="cta_primary_text_en"
                 name="cta_primary_text_en"
-                value={data.heroContent?.cta_primary_text_en || ""}
+                bind:value={formValues.cta_primary_text_en}
                 disabled={loading}
                 placeholder="Read Latest News"
               />
@@ -191,7 +236,7 @@
               <Input
                 id="cta_secondary_text_en"
                 name="cta_secondary_text_en"
-                value={data.heroContent?.cta_secondary_text_en || ""}
+                bind:value={formValues.cta_secondary_text_en}
                 disabled={loading}
                 placeholder="Explore Popular Games"
               />
@@ -206,7 +251,7 @@
               <Input
                 id="cta_primary_url"
                 name="cta_primary_url"
-                value={data.heroContent?.cta_primary_url || ""}
+                bind:value={formValues.cta_primary_url}
                 disabled={loading}
                 placeholder="#berita"
               />
@@ -217,7 +262,7 @@
               <Input
                 id="cta_secondary_url"
                 name="cta_secondary_url"
-                value={data.heroContent?.cta_secondary_url || ""}
+                bind:value={formValues.cta_secondary_url}
                 disabled={loading}
                 placeholder="#kategori"
               />
@@ -229,9 +274,7 @@
             <Textarea
               id="stats"
               name="stats"
-              value={typeof data.heroContent?.stats === "string"
-                ? data.heroContent.stats
-                : JSON.stringify(data.heroContent?.stats || [], null, 2)}
+              bind:value={formValues.stats}
               disabled={loading}
               rows={6}
               placeholder={`[{"value": "500+", "label_id": "Artikel Game", "label_en": "Game Articles"}]`}

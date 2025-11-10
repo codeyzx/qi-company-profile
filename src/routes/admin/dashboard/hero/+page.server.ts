@@ -2,11 +2,16 @@ import { fail, type Actions } from "@sveltejs/kit";
 import { adminClient } from "$lib/supabase";
 import type { PageServerLoad } from "./$types";
 
-export const load: PageServerLoad = async () => {
+export const load: PageServerLoad = async ({ setHeaders }) => {
+  // Set headers untuk memastikan tidak ada caching
+  setHeaders({
+    'cache-control': 'no-store, no-cache, must-revalidate, max-age=0'
+  });
+
   const { data: heroContent, error } = await adminClient
     .from("hero_content")
     .select("*")
-    .order("created_at", { ascending: false })
+    .order("updated_at", { ascending: false })
     .limit(1)
     .single();
 
@@ -68,13 +73,20 @@ export const actions: Actions = {
       result = await adminClient
         .from("hero_content")
         .update(data)
-        .eq("id", existing.id);
+        .eq("id", existing.id)
+        .select()
+        .single();
     } else {
       // Create new
-      result = await adminClient.from("hero_content").insert([data]);
+      result = await adminClient
+        .from("hero_content")
+        .insert([data])
+        .select()
+        .single();
     }
 
     if (result.error) {
+      console.error("Error updating hero content:", result.error);
       return fail(500, { error: result.error.message });
     }
 

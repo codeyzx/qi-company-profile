@@ -9,13 +9,26 @@
   import type { PageData } from "./$types";
 
   let { data }: { data: PageData } = $props();
+
+  // Log data di client side untuk debugging
+  $effect(() => {
+    console.log("Page component - data updated:", {
+      hero: {
+        title_id: data.hero?.title_id,
+        title_en: data.hero?.title_en,
+        updated_at: data.hero?.updated_at,
+      }
+    });
+  });
 </script>
 
 <Navbar
   siteConfig={data.siteConfig || []}
   navbarConfig={data.navbarConfig || undefined}
 />
-<Hero heroData={data.hero || undefined} />
+{#key data.hero?.updated_at}
+  <Hero heroData={data.hero || undefined} />
+{/key}
 <NewsArticles articles={data.articles || []} />
 <PopularGames categories={data.categories || []} />
 <AboutUs aboutData={data.about || undefined} />

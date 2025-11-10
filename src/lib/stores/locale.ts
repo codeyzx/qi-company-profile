@@ -24,7 +24,7 @@ export const setLocale = (newLocale: Locale) => {
 };
 
 // Initialize locale from localStorage if available
-if (typeof localStorage !== "undefined") {
+if (typeof window !== "undefined" && typeof localStorage !== "undefined" && typeof localStorage.getItem === "function") {
   const savedLocale = localStorage.getItem("locale") as Locale | null;
   if (savedLocale && (savedLocale === "id" || savedLocale === "en")) {
     locale.set(savedLocale);
