@@ -8,7 +8,7 @@ import {
 } from "$lib/server/api-utils";
 
 /**
- * GET /api/v1/categories
+ * GET /v1/categories
  * List all categories with optional filtering
  * Query params:
  * - status: Filter by status (draft|published)
@@ -69,7 +69,7 @@ export const GET: RequestHandler = async ({ url }) => {
 };
 
 /**
- * POST /api/v1/categories
+ * POST /v1/categories
  * Create a new category
  * Requires authentication
  */

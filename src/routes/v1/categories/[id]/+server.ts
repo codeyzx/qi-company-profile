@@ -8,7 +8,7 @@ import {
 } from "$lib/server/api-utils";
 
 /**
- * GET /api/v1/categories/[id]
+ * GET /v1/categories/[id]
  * Get a single category by ID
  */
 export const GET: RequestHandler = async ({ params }) => {
@@ -41,7 +41,7 @@ export const GET: RequestHandler = async ({ params }) => {
 };
 
 /**
- * PUT /api/v1/categories/[id]
+ * PUT /v1/categories/[id]
  * Update a category
  * Requires authentication
  */
@@ -117,7 +117,7 @@ export const PUT: RequestHandler = async (event) => {
 };
 
 /**
- * DELETE /api/v1/categories/[id]
+ * DELETE /v1/categories/[id]
  * Delete a category
  * Requires authentication
  */
