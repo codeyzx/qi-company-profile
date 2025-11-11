@@ -17,7 +17,6 @@
   },
   "devDependencies": {
     "@internationalized/date": "^3.10.0",
-    "@sveltejs/adapter-static": "^3.0.10",
     "@sveltejs/kit": "^2.48.4",
     "@sveltejs/vite-plugin-svelte": "^5.1.1",
     "@tailwindcss/container-queries": "^0.1.1",
