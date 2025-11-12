@@ -178,7 +178,8 @@
               <div
                 class="flex items-center gap-3 text-base font-bold text-white bg-gradient-to-r from-jgYellow to-orange-500 px-6 py-3 rounded-full group-hover:gap-4 group-hover:scale-105 transition-all duration-300 shadow-lg hover:shadow-xl"
               >
-                {$t("categories.viewContent")}
+                <span class="hidden md:inline">{$t("categories.viewContent")}</span>
+                <span class="md:hidden">{$t("categories.viewContentShort")}</span>
                 <ArrowRight
                   class="size-5 group-hover:translate-x-1 transition-transform duration-300"
                 />
